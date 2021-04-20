@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    {% block head %}
+      <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}{% endblock %}</title>
@@ -12,12 +13,11 @@
           integrity="sha384-rdyFrfAIC05c5ph7BKz3l5NG5yEottvO/DQ0dCrwD8gzeQDjYBHNr1ucUpQuljos" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/fontawesome.css"
           integrity="sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT" crossorigin="anonymous">
-    <link rel="stylesheet" href="/design-materials/design.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% endblock %}
 </head>
 <body>
-
 {% block content %}{% endblock %}
-
 <div class="modal" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -28,7 +28,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ url_for("login") }}">
+                <form method="POST" action="{{ url_for("index") }}">
                     <label for="username">Username</label>
                     <input id="usr_name" name="usr_name"><br>
                     <label for="password">Password</label>
@@ -53,7 +53,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ url_for("register") }}" id="registrationForm">
+                <form method="POST" action="{{ url_for("index") }}" id="registrationForm">
                     <label for="username">Username</label>
                     <input id="usr_name" name="usr_name" placeholder="username"><br>
                     <label for="password">Password</label>
