@@ -1,67 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 12.6 (Ubuntu 12.6-0ubuntu0.20.04.1)
--- Dumped by pg_dump version 12.6 (Ubuntu 12.6-0ubuntu0.20.04.1)
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- Name: proman; Type: DATABASE; Schema: -; Owner: riki
---
-
-CREATE DATABASE proman WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8';
-
-
-ALTER DATABASE proman OWNER TO riki;
-
-\connect proman
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
---
-
-CREATE SCHEMA public;
-
-
-ALTER SCHEMA public OWNER TO postgres;
-
---
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
---
-
-COMMENT ON SCHEMA public IS 'standard public schema';
-
-
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
---
--- Name: boards; Type: TABLE; Schema: public; Owner: riki
---
-
 CREATE TABLE public.boards (
     id integer NOT NULL,
     title text,
@@ -69,10 +5,10 @@ CREATE TABLE public.boards (
 );
 
 
-ALTER TABLE public.boards OWNER TO riki;
+ALTER TABLE public.boards OWNER TO kprohaszka;
 
 --
--- Name: boards_id_seq; Type: SEQUENCE; Schema: public; Owner: riki
+-- Name: boards_id_seq; Type: SEQUENCE; Schema: public; Owner: kprohaszka
 --
 
 CREATE SEQUENCE public.boards_id_seq
@@ -84,17 +20,17 @@ CREATE SEQUENCE public.boards_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.boards_id_seq OWNER TO riki;
+ALTER TABLE public.boards_id_seq OWNER TO kprohaszka;
 
 --
--- Name: boards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: riki
+-- Name: boards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kprohaszka
 --
 
 ALTER SEQUENCE public.boards_id_seq OWNED BY public.boards.id;
 
 
 --
--- Name: cards; Type: TABLE; Schema: public; Owner: riki
+-- Name: cards; Type: TABLE; Schema: public; Owner: kprohaszka
 --
 
 CREATE TABLE public.cards (
@@ -106,10 +42,10 @@ CREATE TABLE public.cards (
 );
 
 
-ALTER TABLE public.cards OWNER TO riki;
+ALTER TABLE public.cards OWNER TO kprohaszka;
 
 --
--- Name: cards_id_seq; Type: SEQUENCE; Schema: public; Owner: riki
+-- Name: cards_id_seq; Type: SEQUENCE; Schema: public; Owner: kprohaszka
 --
 
 CREATE SEQUENCE public.cards_id_seq
@@ -121,17 +57,17 @@ CREATE SEQUENCE public.cards_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.cards_id_seq OWNER TO riki;
+ALTER TABLE public.cards_id_seq OWNER TO kprohaszka;
 
 --
--- Name: cards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: riki
+-- Name: cards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kprohaszka
 --
 
 ALTER SEQUENCE public.cards_id_seq OWNED BY public.cards.id;
 
 
 --
--- Name: statuses; Type: TABLE; Schema: public; Owner: riki
+-- Name: statuses; Type: TABLE; Schema: public; Owner: kprohaszka
 --
 
 CREATE TABLE public.statuses (
@@ -140,10 +76,10 @@ CREATE TABLE public.statuses (
 );
 
 
-ALTER TABLE public.statuses OWNER TO riki;
+ALTER TABLE public.statuses OWNER TO kprohaszka;
 
 --
--- Name: statuses_id_seq; Type: SEQUENCE; Schema: public; Owner: riki
+-- Name: statuses_id_seq; Type: SEQUENCE; Schema: public; Owner: kprohaszka
 --
 
 CREATE SEQUENCE public.statuses_id_seq
@@ -155,17 +91,17 @@ CREATE SEQUENCE public.statuses_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.statuses_id_seq OWNER TO riki;
+ALTER TABLE public.statuses_id_seq OWNER TO kprohaszka;
 
 --
--- Name: statuses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: riki
+-- Name: statuses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kprohaszka
 --
 
 ALTER SEQUENCE public.statuses_id_seq OWNED BY public.statuses.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: riki
+-- Name: users; Type: TABLE; Schema: public; Owner: kprohaszka
 --
 
 CREATE TABLE public.users (
@@ -175,10 +111,10 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO riki;
+ALTER TABLE public.users OWNER TO kprohaszka;
 
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: riki
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: kprohaszka
 --
 
 CREATE SEQUENCE public.users_id_seq
@@ -190,45 +126,45 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO riki;
+ALTER TABLE public.users_id_seq OWNER TO kprohaszka;
 
 --
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: riki
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kprohaszka
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: boards id; Type: DEFAULT; Schema: public; Owner: riki
+-- Name: boards id; Type: DEFAULT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.boards ALTER COLUMN id SET DEFAULT nextval('public.boards_id_seq'::regclass);
 
 
 --
--- Name: cards id; Type: DEFAULT; Schema: public; Owner: riki
+-- Name: cards id; Type: DEFAULT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.cards ALTER COLUMN id SET DEFAULT nextval('public.cards_id_seq'::regclass);
 
 
 --
--- Name: statuses id; Type: DEFAULT; Schema: public; Owner: riki
+-- Name: statuses id; Type: DEFAULT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.statuses ALTER COLUMN id SET DEFAULT nextval('public.statuses_id_seq'::regclass);
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: riki
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- Data for Name: boards; Type: TABLE DATA; Schema: public; Owner: riki
+-- Data for Name: boards; Type: TABLE DATA; Schema: public; Owner: kprohaszka
 --
 
 INSERT INTO public.boards (id, title, user_id) VALUES (1, 'Board 1', NULL);
@@ -236,7 +172,7 @@ INSERT INTO public.boards (id, title, user_id) VALUES (2, 'Board 2', NULL);
 
 
 --
--- Data for Name: cards; Type: TABLE DATA; Schema: public; Owner: riki
+-- Data for Name: cards; Type: TABLE DATA; Schema: public; Owner: kprohaszka
 --
 
 INSERT INTO public.cards (id, board_id, title, status_id, "order") VALUES (1, 1, 'new card 1', 0, 0);
@@ -254,7 +190,7 @@ INSERT INTO public.cards (id, board_id, title, status_id, "order") VALUES (12, 2
 
 
 --
--- Data for Name: statuses; Type: TABLE DATA; Schema: public; Owner: riki
+-- Data for Name: statuses; Type: TABLE DATA; Schema: public; Owner: kprohaszka
 --
 
 INSERT INTO public.statuses (id, title) VALUES (0, 'new');
@@ -264,41 +200,41 @@ INSERT INTO public.statuses (id, title) VALUES (3, 'done');
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: riki
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: kprohaszka
 --
 
 
 
 --
--- Name: boards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: riki
+-- Name: boards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kprohaszka
 --
 
 SELECT pg_catalog.setval('public.boards_id_seq', 1, false);
 
 
 --
--- Name: cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: riki
+-- Name: cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kprohaszka
 --
 
 SELECT pg_catalog.setval('public.cards_id_seq', 1, false);
 
 
 --
--- Name: statuses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: riki
+-- Name: statuses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kprohaszka
 --
 
 SELECT pg_catalog.setval('public.statuses_id_seq', 1, false);
 
 
 --
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: riki
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kprohaszka
 --
 
 SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
--- Name: boards boards_pkey; Type: CONSTRAINT; Schema: public; Owner: riki
+-- Name: boards boards_pkey; Type: CONSTRAINT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.boards
@@ -306,7 +242,7 @@ ALTER TABLE ONLY public.boards
 
 
 --
--- Name: cards cards_pkey; Type: CONSTRAINT; Schema: public; Owner: riki
+-- Name: cards cards_pkey; Type: CONSTRAINT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.cards
@@ -314,7 +250,7 @@ ALTER TABLE ONLY public.cards
 
 
 --
--- Name: statuses statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: riki
+-- Name: statuses statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.statuses
@@ -322,7 +258,7 @@ ALTER TABLE ONLY public.statuses
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: riki
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.users
@@ -330,7 +266,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: riki
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.users
@@ -338,7 +274,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: cards board_id___fk; Type: FK CONSTRAINT; Schema: public; Owner: riki
+-- Name: cards board_id___fk; Type: FK CONSTRAINT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.cards
@@ -346,7 +282,7 @@ ALTER TABLE ONLY public.cards
 
 
 --
--- Name: boards boards_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: riki
+-- Name: boards boards_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.boards
@@ -354,7 +290,7 @@ ALTER TABLE ONLY public.boards
 
 
 --
--- Name: cards cards_status_id___fk; Type: FK CONSTRAINT; Schema: public; Owner: riki
+-- Name: cards cards_status_id___fk; Type: FK CONSTRAINT; Schema: public; Owner: kprohaszka
 --
 
 ALTER TABLE ONLY public.cards
