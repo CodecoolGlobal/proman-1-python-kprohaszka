@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, url_for, redirect, make_response, session, escape
+from flask import Flask, render_template, request, url_for, redirect, make_response, session, escape, current_app
 import util
 import data_handler
 
 app = Flask(__name__)
 app.secret_key = b'super_secret_key'
 app.permanent_session_lifetime = False
+
 
 
 @app.route("/")
