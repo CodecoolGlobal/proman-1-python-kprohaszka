@@ -54,3 +54,13 @@ def get_usr_credentials(cursor: RealDictCursor, usr_name):
     var = {'name': usr_name}
     cursor.execute(query, var)
     return cursor.fetchone()
+
+
+@database_common.connection_handler
+def add_new_card(cursor: RealDictCursor, board_id, title: str, status_id, order):
+    query = """
+    INSERT INTO cards
+    VALUES (%(board_id)s, %(title)s, %(status_id)s, %(order)s)
+    """
+    args = {'board_id':board_id, 'title':title, 'status_id':status_id, 'order':order}
+    cursor.execute(query, args)

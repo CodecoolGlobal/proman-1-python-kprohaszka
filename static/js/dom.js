@@ -21,12 +21,12 @@ export let dom = {
             boardList += `
                 <section class="board" id="${boards.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
-                <button class="board-add">Add Card</button>
+                <button class="board-add" id="add" onclick="createNewCard()">Create new card</button>
                 <button type="button"  class="board-toggle" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns collapse" id="board${board.id}">
             <div class="board-column">
-                    <div class="board-column-title">New</div>
+                    <div class="board-column-title" id="new">New</div>
                 </div>
                 <div class="board-column">
                     <div class="board-column-title">In Progress</div>
