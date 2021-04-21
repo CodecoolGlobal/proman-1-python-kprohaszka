@@ -24,6 +24,13 @@ def get_boards():
     return data_handler.get_boards()
 
 
+@app.route('/create-new-board', methods=['GET', 'POST'])
+@util.json_response
+def create_new_board():
+    title = ""
+    data_handler.create_new_board(title)
+
+
 @app.route("/get-cards/<int:board_id>")
 @util.json_response
 def get_cards_for_board(board_id: int):
