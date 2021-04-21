@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, make_response, session, escape, current_app
+from flask import Flask, render_template, request, url_for, redirect, make_response, session, escape, current_app, jsonify, json
 import util
 import data_handler
 
@@ -61,6 +61,15 @@ def logout():
     # remove the username from the session if it's there
     session.pop('user', None)
     return redirect(url_for('index'))
+
+
+@app.route("/create-card", methods=["GET", "POST"])
+@util.json_response
+def add_new_card():
+    data = request.json
+    data_handler.add_new_card( data["board_id"],data["card_title"], data["status_id"])
+
+
 
 
 def main():

@@ -57,10 +57,20 @@ def get_usr_credentials(cursor: RealDictCursor, usr_name):
 
 
 @database_common.connection_handler
-def add_new_card(cursor: RealDictCursor, board_id, title: str, status_id, order):
+def add_new_card(cursor: RealDictCursor, board_id:int, title: str, status_id):
     query = """
-    INSERT INTO cards
-    VALUES (%(board_id)s, %(title)s, %(status_id)s, %(order)s)
+    INSERT INTO cards(board_id, title, status_id)
+    VALUES (%(board_id)s, %(title)s, %(status_id)s)
     """
-    args = {'board_id':board_id, 'title':title, 'status_id':status_id, 'order':order}
+    args = {'board_id':board_id, 'title':title, 'status_id':status_id}
     cursor.execute(query, args)
+
+
+@database_common.connection_handler
+def get_cards(cursor: RealDictCursor) -> list:
+    query = """
+            SELECT *
+            FROM cards
+            """
+    cursor.execute(query)
+    return cursor.fetchall()
