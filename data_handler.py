@@ -5,15 +5,14 @@ from psycopg2.extras import RealDictCursor
 import database_common
 import persistence
 
-
-def get_card_status(status_id):
-    """
-    Find the first status matching the given id
-    :param status_id:
-    :return: str
-    """
-    statuses = persistence.get_statuses()
-    return next((status['title'] for status in statuses if status['id'] == str(status_id)), 'Unknown')
+@database_common.connection_handler
+def get_statuses(cursor: RealDictCursor) -> list:
+    query = """
+                SELECT *
+                FROM statuses
+                """
+    cursor.execute(query)
+    return cursor.fetchall()
 
 @database_common.connection_handler
 def get_boards(cursor: RealDictCursor) -> list:
