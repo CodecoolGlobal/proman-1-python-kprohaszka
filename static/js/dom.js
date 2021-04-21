@@ -24,7 +24,7 @@ export let dom = {
                 <section class="board" id="${boards.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
                 <button class="board-add">Add Card</button>
-                <button onclick="loadCards(${board.id})" id="button_board${board.id}" type="button"  class="board-toggle" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
+                <button data-board-id="${board.id}" id="button_board${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns collapse" id="board${board.id}">
             <div class="board-column">
@@ -42,7 +42,6 @@ export let dom = {
             </div>
             </section>
             `;
-            document.getElementById("button_board"+board.id).addEventListener("click", dom.loadCards(board.id))
         }
 
         const outerHtml = `
@@ -53,10 +52,14 @@ export let dom = {
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+        for(let button of document.querySelectorAll(".valami")){
+            button.addEventListener("click",(event) => dom.loadCards(event, button.dataset.boardId))
+        }
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
-        dataHandler.getCardsByBoardId(function (boardId) {
+        console.log("hello")
+        dataHandler.getCardsByBoardId(boardId,function (cards) {
         dom.showCards(cards);
         });
 
