@@ -15,6 +15,7 @@ def get_card_status(status_id):
     statuses = persistence.get_statuses()
     return next((status['title'] for status in statuses if status['id'] == str(status_id)), 'Unknown')
 
+
 @database_common.connection_handler
 def get_boards(cursor: RealDictCursor) -> list:
     query = """
@@ -35,6 +36,7 @@ def get_cards_for_board(board_id):
             matching_cards.append(card)
     return matching_cards
 
+
 @database_common.connection_handler
 def register_usr(cursor: RealDictCursor, usr_name, password):
     query = """
@@ -43,6 +45,7 @@ def register_usr(cursor: RealDictCursor, usr_name, password):
         """
     var = {'name': usr_name, 'pass': password}
     cursor.execute(query, var)
+
 
 @database_common.connection_handler
 def get_usr_credentials(cursor: RealDictCursor, usr_name):
