@@ -8,14 +8,16 @@ export let dom = {
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function (boards) {
-            dom.showBoards(boards);
+            dataHandler.getStatuses(function (statuses){
+            dom.showBoards(boards, statuses);
+            })
         });
 
     },
-    showBoards: function (boards) {
+    showBoards: function (boards, statuses) {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
-
+        console.log(statuses)
         let boardList = '';
 
         for (let board of boards) {
@@ -27,16 +29,16 @@ export let dom = {
             </div>
             <div class="board-columns collapse" id="board${board.id}">
             <div class="board-column">
-                    <div class="board-column-title" id="${statuses.id[0]}">${statuses.title[0]}</div>
+                    <div class="board-column-title" id="status${statuses[0].id}">${statuses[0].title}</div>
                 </div>
                 <div class="board-column">
-                    <div class="board-column-title" id="${statuses.id[1]}">${statuses.title[0]}</div>
+                    <div class="board-column-title" id="status${statuses[1].id}">${statuses[1].title}</div>
                 </div>
                 <div class="board-column">
-                    <div class="board-column-title" id="${statuses.id[2]}">${statuses.title[0]}</div>
+                    <div class="board-column-title" id="status${statuses[2].id}">${statuses[2].title}</div>
                 </div>
                 <div class="board-column">
-                    <div class="board-column-title" id="${statuses.id[3]}">${statuses.title[0]}</div>
+                    <div class="board-column-title" id="status${statuses[3].id}">${statuses[3].title}</div>
                 </div>
             </div>
             </section>
