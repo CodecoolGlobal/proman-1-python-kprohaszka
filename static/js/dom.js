@@ -1,5 +1,5 @@
 // It uses data_handler.js to visualize elements
-import { dataHandler } from "./data_handler.js";
+import {dataHandler} from "./data_handler.js";
 
 export let dom = {
     init: function () {
@@ -7,7 +7,7 @@ export let dom = {
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function(boards){
+        dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
         });
     },
@@ -17,16 +17,35 @@ export let dom = {
 
         let boardList = '';
 
-        for(let board of boards){
+        for (let board of boards) {
             boardList += `
-                <li>${board.title}</li>
+                <section class="board" id="${boards.id}">
+            <div class="board-header"><span class="board-title">${board.title}</span>
+                <button class="board-add">Add Card</button>
+                <button type="button"  class="board-toggle" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div class="board-columns collapse" id="board${board.id}">
+            <div class="board-column">
+                    <div class="board-column-title">New</div>
+                </div>
+                <div class="board-column">
+                    <div class="board-column-title">In Progress</div>
+                </div>
+                <div class="board-column">
+                    <div class="board-column-title">Testing</div>
+                </div>
+                <div class="board-column">
+                    <div class="board-column-title">Done</div>
+                </div>
+            </div>
+            </section>
             `;
         }
 
         const outerHtml = `
-            <ul class="board-container">
+            <div class="board-container">
                 ${boardList}
-            </ul>
+            </div>>
         `;
 
         let boardsContainer = document.querySelector('#boards');
