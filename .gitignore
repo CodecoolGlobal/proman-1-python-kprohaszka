@@ -324,3 +324,6 @@ pyvenv.cfg
 pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/venv,intellij+all,pycharm+all,python,git
+
+test.js
+index_backup.html
