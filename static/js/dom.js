@@ -24,7 +24,7 @@ export let dom = {
                 <section class="board" id="${boards.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
                 <button class="board-add">Add Card</button>
-                <button data-board-id="${board.id}" id="button_board${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
+                <button data-board-id="${board.id}" id="${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns collapse" id="board${board.id}">
             <div class="board-column">
@@ -47,15 +47,17 @@ export let dom = {
         const outerHtml = `
             <div class="board-container">
                 ${boardList}
-            </div>>
+            </div>
         `;
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
-        for(let button of document.querySelectorAll(".valami")){
-            button.addEventListener("click",(event) => dom.loadCards(event, button.dataset.boardId))
+        for(let button of document.querySelectorAll(".board-toggle")){
+            button.addEventListener("click",(event) => dom.loadCards(button.id))
         }
     },
+
+
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
         console.log("hello")
@@ -67,7 +69,38 @@ export let dom = {
     showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
-    console.log("hello")
+        let newCard = '';
+        let inprogressCard='';
+        let testing = '';
+        let done = '';
+        for (let card of cards) {
+            if (card.status_id == 0) {
+                newCard += `<div className="card" id="${card.id}" status="${card.status_id}">
+                    <div className="card-remove"><i className="fas fa-trash-alt"></i></div>
+                    <div className="card-title">${card.title}</div>
+                </div>`
+
+                console.log("Done")
+            } else if (card.status_id == 1) {
+                inprogressCard += `<div className="card" id="${card.id}" status="${card.status_id}">
+                    <div className="card-remove"><i className="fas fa-trash-alt"></i></div>
+                    <div className="card-title">${card.title}</div>
+                </div>`
+            }
+            else if (card.status_id == 2) {
+                testing += `<div className="card" id="${card.id}" status="${card.status_id}">
+                    <div className="card-remove"><i className="fas fa-trash-alt"></i></div>
+                    <div className="card-title">${card.title}</div>
+                </div>`
+            }
+            else if (card.status_id == 3) {
+                done += `<div className="card" id="${card.id}" status="${card.status_id}">
+                    <div className="card-remove"><i className="fas fa-trash-alt"></i></div>
+                    <div className="card-title">${card.title}</div>
+                </div>`
+            }
+        }
+        console.log(newCard)
     },
     // here comes more features
 };

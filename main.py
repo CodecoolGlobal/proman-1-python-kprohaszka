@@ -39,7 +39,14 @@ def get_cards_for_board(board_id: int):
     All cards that belongs to a board
     :param board_id: id of the parent board
     """
-    return data_handler.get_cards_for_board(board_id)
+    cards_all = data_handler.get_cards_for_board()
+    cards = []
+    print(cards_all)
+    for card in cards_all:
+        if card['board_id'] == board_id:
+            cards.append(card)
+    print(cards)
+    return cards
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -68,6 +75,8 @@ def logout():
     # remove the username from the session if it's there
     session.pop('user', None)
     return redirect(url_for('index'))
+
+
 
 
 def main():

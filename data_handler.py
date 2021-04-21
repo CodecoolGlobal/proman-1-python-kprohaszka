@@ -23,16 +23,16 @@ def get_boards(cursor: RealDictCursor) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
+@database_common.connection_handler
+def get_cards_for_board(cursor: RealDictCursor) -> list:
+    query = """
+                SELECT *
+                FROM cards
+                """
+    cursor.execute(query)
 
-def get_cards_for_board(board_id):
-    persistence.clear_cache()
-    all_cards = persistence.get_cards()
-    matching_cards = []
-    for card in all_cards:
-        if card['board_id'] == str(board_id):
-            card['status_id'] = get_card_status(card['status_id'])  # Set textual status for the card
-            matching_cards.append(card)
-    return matching_cards
+    return cursor.fetchall()
+
 
 @database_common.connection_handler
 def register_usr(cursor: RealDictCursor, usr_name, password):
