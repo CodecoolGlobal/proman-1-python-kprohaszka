@@ -7,7 +7,6 @@ app.secret_key = b'super_secret_key'
 app.permanent_session_lifetime = False
 
 
-
 @app.route("/")
 def index():
     """

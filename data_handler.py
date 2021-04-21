@@ -38,6 +38,15 @@ def get_cards_for_board(board_id):
 
 
 @database_common.connection_handler
+def create_new_board(cursor, title):
+    cursor.execute("""
+    INSERT INTO boards (title) 
+    VALUES (%(title)s)
+    """, {'title': title})
+
+
+# User Related
+@database_common.connection_handler
 def register_usr(cursor: RealDictCursor, usr_name, password):
     query = """
         INSERT INTO users (username, password)
