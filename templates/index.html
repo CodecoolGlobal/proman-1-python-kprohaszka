@@ -6,12 +6,12 @@
 {% block content %}
     <!-- Emmet: .board-container>section.board*3>.board-header>(span.board-title{Board $}+button.board-add{Add Card}+button.board-toggle>i.fas.fa-chevron-down)^.board-columns>((.board-column>.board-column-title{New}+.board-column-content>.card*5>(.card-remove>i.fas.fa-trash-alt^.card-title{Card $}))+(.board-column>.board-column-title{In Progress}+.board-column-content>.card*5>(.card-remove>i.fas.fa-trash-alt^.card-title{Card $}))+(.board-column>.board-column-title{Testing}+.board-column-content>.card*5>(.card-remove>i.fas.fa-trash-alt^.card-title{Card $}))+(.board-column>.board-column-title{Done}+.board-column-content>.card*5>(.card-remove>i.fas.fa-trash-alt^.card-title{Card $}))) -->
 {#    add boards #}
-    <button type="button" id="add-board" class="btn btn-dark">Add board</button>
-        <div id="new-board-input" >
+    <button type="button" id="add-board" class="btn btn-dark">Create new board</button>
+        <div id="new-board-input" hidden>
             <form class="form-inline">
                 <label class="sr-only" for="new-board-name">Board name</label>
                 <input type="text" class="form-control mb-2 mr-sm-2" id="new-board-name" placeholder="Board name">
-                <button type="button" class="btn btn-success mb-2" id="create-board">Create Board</button>
+                <button type="button" class="btn btn-success mb-2" id="create-board">Save</button>
                 <button type="button" class="btn btn-secondary mb-2" id="cancel-board">Cancel</button>
             </form>
         </div>
