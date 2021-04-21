@@ -17,7 +17,6 @@ export let dom = {
     showBoards: function (boards, statuses) {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
-        console.log(statuses)
         let boardList = '';
 
         for (let board of boards) {
@@ -25,7 +24,7 @@ export let dom = {
                 <section class="board" id="${boards.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
                 <button class="board-add">Add Card</button>
-                <button type="button"  class="board-toggle" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
+                <button onclick="loadCards(${board.id})" id="button_board${board.id}" type="button"  class="board-toggle" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns collapse" id="board${board.id}">
             <div class="board-column">
@@ -43,6 +42,7 @@ export let dom = {
             </div>
             </section>
             `;
+            document.getElementById("button_board"+board.id).addEventListener("click", dom.loadCards(board.id))
         }
 
         const outerHtml = `
@@ -56,10 +56,15 @@ export let dom = {
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
+        dataHandler.getCardsByBoardId(function (boardId) {
+        dom.showCards(cards);
+        });
+
     },
     showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
+    console.log("hello")
     },
     // here comes more features
 };
