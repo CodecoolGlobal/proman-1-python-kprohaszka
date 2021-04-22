@@ -38,11 +38,13 @@ def get_cards_for_board(board_id):
 
 
 @database_common.connection_handler
-def create_new_board(cursor, title):
-    cursor.execute("""
+def create_new_board(cursor: RealDictCursor, title):
+    query = """
     INSERT INTO boards (title) 
     VALUES (%(title)s)
-    """, {'title': title})
+    """
+    args = {'title': title}
+    cursor.execute(query, args)
 
 
 # User Related
