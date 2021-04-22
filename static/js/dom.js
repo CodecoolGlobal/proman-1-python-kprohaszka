@@ -8,8 +8,8 @@ export let dom = {
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function (boards) {
-            dataHandler.getStatuses(function (statuses){
-            dom.showBoards(boards, statuses);
+            dataHandler.getStatuses(function (statuses) {
+                dom.showBoards(boards, statuses);
             })
         });
 
@@ -58,10 +58,10 @@ export let dom = {
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
-        for(let button of document.querySelectorAll(".board-toggle")){
-            button.addEventListener("click",() => dom.loadCards(button.dataset.boardId))
+        for (let button of document.querySelectorAll(".board-toggle")) {
+            button.addEventListener("click", () => dom.loadCards(button.dataset.boardId))
         }
-        for(let button of document.querySelectorAll(".card-add-btn")){
+        for (let button of document.querySelectorAll(".card-add-btn")) {
             button.addEventListener("click", dom.createNewCard)
         }
     },
@@ -69,8 +69,8 @@ export let dom = {
 
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
-        dataHandler.getCardsByBoardId(boardId,function (cards) {
-        dom.showCards(cards, boardId);
+        dataHandler.getCardsByBoardId(boardId, function (cards) {
+            dom.showCards(cards, boardId);
         });
 
     },
@@ -78,29 +78,31 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
         let newCards = '';
-        let inprogressCards='';
+        let inprogressCards = '';
         let testingCards = '';
         let doneCards = '';
         // refine it to match design template
         for (let card of cards) {
             if (card.status_id === 0) {
-                newCards += `<div className="card" id="card${card.id}" status="${card.status_id}"> 
-                    <div className="card-title">${card.title}</div>
+                newCards += `<div class="card" id="card${card.id}" status="${card.status_id}"> 
+                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                    <div class="card-title">${card.title}</div>
                 </div>`
 
             } else if (card.status_id === 1) {
-                inprogressCards += `<div className="card" id="card${card.id}" status="${card.status_id}">
-                    <div className="card-title">${card.title}</div>
+                inprogressCards += `<div class="card" id="card${card.id}" status="${card.status_id}">
+                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                    <div class="card-title">${card.title}</div>
                 </div>`
-            }
-            else if (card.status_id === 2) {
-                testingCards += `<div className="card" id="card${card.id}" status="${card.status_id}">
-                    <div className="card-title">${card.title}</div>
+            } else if (card.status_id === 2) {
+                testingCards += `<div class="card" id="card${card.id}" status="${card.status_id}">
+                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                    <div class="card-title">${card.title}</div>
                 </div>`
-            }
-            else if (card.status_id === 3) {
-                doneCards += `<div className="card" id="card${card.id}" status="${card.status_id}">                    
-                    <div className="card-title">${card.title}</div>
+            } else if (card.status_id === 3) {
+                doneCards += `<div class="card" id="card${card.id}" status="${card.status_id}">
+                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>                    
+                    <div class="card-title">${card.title}</div>
                 </div>`
             }
         }
@@ -109,7 +111,7 @@ export let dom = {
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="2"] .card-container`).innerHTML = testingCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="3"] .card-container`).innerHTML = doneCards
     },
-createNewCard: function (event) {
+    createNewCard: function (event) {
         const boardId = event.target.dataset.boardId
         let inputText = window.prompt("Enter a card title : ");
         let column = document.querySelector(`#column-${boardId}-0`)
@@ -125,16 +127,17 @@ createNewCard: function (event) {
     },
     // here comes more features
     // ADD Board
-    addBoardButtonToggle: function()
-        {
-            let addBoardButton = document.getElementById('add-board');
-            addBoardButton.addEventListener('click', this.createBoard);
-        },
-    createBoard: function (){
-       let titleInput = window.prompt("Board name?");
-       dataHandler.createNewBoard(titleInput, function (){console.log(titleInput)});
-       let boardsContainerKill = document.getElementById("boards");
-       boardsContainerKill.innerHTML = ``;
-       dom.loadBoards();
-       },
+    addBoardButtonToggle: function () {
+        let addBoardButton = document.getElementById('add-board');
+        addBoardButton.addEventListener('click', this.createBoard);
+    },
+    createBoard: function () {
+        let titleInput = window.prompt("Board name?");
+        dataHandler.createNewBoard(titleInput, function () {
+            console.log(titleInput)
+        });
+        let boardsContainerKill = document.getElementById("boards");
+        boardsContainerKill.innerHTML = ``;
+        dom.loadBoards();
+    },
 };
