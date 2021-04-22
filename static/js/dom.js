@@ -44,31 +44,13 @@ export let dom = {
     addBoardButtonToggle: function()
         {
             let addBoardButton = document.getElementById('add-board');
-            addBoardButton.addEventListener('click', addNewBoard);
-
-        function addNewBoard() {
-            document.getElementById('add-board').disabled = true;
-            createInputForNewBoard()}
-
-        function createInputForNewBoard()
-            {
-            document.getElementById('new-board-input').hidden = false;
-            let saveButton = document.getElementById('create-board');
-            let cancelButton = document.getElementById('cancel-board');
-            saveButton.addEventListener('click', dom.createBoard);
-            cancelButton.addEventListener('click', closeForm);}
-
-        function closeForm() {
-            document.getElementById('new-board-input').hidden = true;
-            document.getElementById('new-board-input').value = '';
-            document.getElementById('add-board').disabled = false;}
-
-    },
+            addBoardButton.addEventListener('click', this.createBoard);
+        },
     createBoard: function (){
-       let titleInput = window.prompt("Howdy?");
+       let titleInput = window.prompt("Board name?");
        let boardContainer = document.getElementById("boards");
-            boardContainer.innerHTML += `
-            <h1>`+ titleInput +`</h1>
+       boardContainer.innerHTML += `
+            <div class="board-header"><span class="board-title">${titleInput}</span>
             `
         dataHandler.createNewBoard(titleInput, function (){console.log("DOOM METAL")})
     },
