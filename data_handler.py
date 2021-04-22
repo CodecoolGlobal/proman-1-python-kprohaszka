@@ -14,6 +14,7 @@ def get_statuses(cursor: RealDictCursor) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
+
 @database_common.connection_handler
 def get_boards(cursor: RealDictCursor) -> list:
     query = """
@@ -34,6 +35,18 @@ def get_cards_for_board(cursor: RealDictCursor) -> list:
     return cursor.fetchall()
 
 
+
+@database_common.connection_handler
+def create_new_board(cursor: RealDictCursor, title):
+    query = """
+    INSERT INTO boards (title) 
+    VALUES (%(title)s)
+    """
+    args = {'title': title}
+    cursor.execute(query, args)
+
+
+# User Related
 @database_common.connection_handler
 def register_usr(cursor: RealDictCursor, usr_name, password):
     query = """
@@ -42,6 +55,7 @@ def register_usr(cursor: RealDictCursor, usr_name, password):
         """
     var = {'name': usr_name, 'pass': password}
     cursor.execute(query, var)
+
 
 @database_common.connection_handler
 def get_usr_credentials(cursor: RealDictCursor, usr_name):

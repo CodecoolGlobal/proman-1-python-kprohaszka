@@ -107,4 +107,17 @@ export let dom = {
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="3"] .card-container`).innerHTML = doneCards
     },
     // here comes more features
+    // ADD Board
+    addBoardButtonToggle: function()
+        {
+            let addBoardButton = document.getElementById('add-board');
+            addBoardButton.addEventListener('click', this.createBoard);
+        },
+    createBoard: function (){
+       let titleInput = window.prompt("Board name?");
+       dataHandler.createNewBoard(titleInput, function (){console.log(titleInput)});
+       let boardsContainerKill = document.getElementById("boards");
+       boardsContainerKill.innerHTML = ``;
+       dom.loadBoards();
+       },
 };

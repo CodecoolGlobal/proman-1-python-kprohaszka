@@ -7,7 +7,6 @@ app.secret_key = b'super_secret_key'
 app.permanent_session_lifetime = False
 
 
-
 @app.route("/")
 def index():
     """
@@ -31,6 +30,14 @@ def get_statuses():
     All the statuses
     """
     return data_handler.get_statuses()
+
+
+@app.route('/create-new-board', methods=['GET', 'POST'])
+@util.json_response
+def create_new_board():
+    title = request.json
+    data_handler.create_new_board(title['title'])
+
 
 @app.route("/get-cards/<int:board_id>")
 @util.json_response
@@ -75,8 +82,6 @@ def logout():
     # remove the username from the session if it's there
     session.pop('user', None)
     return redirect(url_for('index'))
-
-
 
 
 def main():
