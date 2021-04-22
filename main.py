@@ -42,7 +42,7 @@ def get_cards_for_board(board_id: int):
     cards_all = data_handler.get_cards_for_board()
     cards = []
     print(cards_all)
-    for card in cards_all:
+    for card in cards_all: # make better sql query
         if card['board_id'] == board_id:
             cards.append(card)
     print(cards)

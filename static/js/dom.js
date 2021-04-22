@@ -19,9 +19,10 @@ export let dom = {
         // it adds necessary event listeners also
         let boardList = '';
         let i = 0;
+        //make the button id unique
         for (let board of boards) {
             boardList += `
-                <section class="board" id="${boards.id}">
+                <section class="board" id="${board.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
                 <button class="board-add">Add Card</button>
                 <button data-board-id="${board.id}" id="${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
@@ -73,9 +74,10 @@ export let dom = {
         let inprogressCard='';
         let testing = '';
         let done = '';
+        // refine it to match design template
         for (let card of cards) {
             if (card.status_id == 0) {
-                newCard += `<div className="card" id="${card.id}" status="${card.status_id}">
+                newCard += `<div className="card" id="${card.id}" status="${card.status_id}"> 
                     <div className="card-title">${card.title}</div>
                 </div>`
 
