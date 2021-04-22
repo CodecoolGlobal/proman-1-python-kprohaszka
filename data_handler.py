@@ -5,6 +5,7 @@ from psycopg2.extras import RealDictCursor
 import database_common
 import persistence
 
+
 @database_common.connection_handler
 def get_statuses(cursor: RealDictCursor) -> list:
     query = """
@@ -24,6 +25,7 @@ def get_boards(cursor: RealDictCursor) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
+
 @database_common.connection_handler
 def get_cards_for_board(cursor: RealDictCursor) -> list:
     query = """
@@ -33,7 +35,6 @@ def get_cards_for_board(cursor: RealDictCursor) -> list:
     cursor.execute(query)
 
     return cursor.fetchall()
-
 
 
 @database_common.connection_handler
@@ -67,3 +68,13 @@ def get_usr_credentials(cursor: RealDictCursor, usr_name):
     var = {'name': usr_name}
     cursor.execute(query, var)
     return cursor.fetchone()
+
+
+@database_common.connection_handler
+def add_new_card(cursor: RealDictCursor, board_id: int, title: str, status_id):
+    query = """
+    INSERT INTO cards(board_id, title, status_id)
+    VALUES (%(board_id)s, %(title)s, %(status_id)s)
+    """
+    args = {'board_id': board_id, 'title': title, 'status_id': status_id}
+    cursor.execute(query, args)
