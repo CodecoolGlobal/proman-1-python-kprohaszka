@@ -10,6 +10,7 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
         });
+
     },
     showBoards: function (boards) {
         // shows boards appending them to #boards div
@@ -26,16 +27,16 @@ export let dom = {
             </div>
             <div class="board-columns collapse" id="board${board.id}">
             <div class="board-column">
-                    <div class="board-column-title" data-board-id="${board.id}" id="new">New</div>
+                    <div class="board-column-title" data-board-id="${board.id}" id="${statuses.id[0]}">${statuses.title[0]}</div>
                 </div>
                 <div class="board-column">
-                    <div class="board-column-title">In Progress</div>
+                    <div class="board-column-title" id="${statuses.id[1]}">${statuses.title[0]}</div>
                 </div>
                 <div class="board-column">
-                    <div class="board-column-title">Testing</div>
+                    <div class="board-column-title" id="${statuses.id[2]}">${statuses.title[0]}</div>
                 </div>
                 <div class="board-column">
-                    <div class="board-column-title">Done</div>
+                    <div class="board-column-title" id="${statuses.id[3]}">${statuses.title[0]}</div>
                 </div>
             </div>
             </section>
