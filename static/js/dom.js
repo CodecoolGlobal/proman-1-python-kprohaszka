@@ -12,7 +12,12 @@ export let dom = {
         });
 
     },
-    showBoards: function (boards) {
+
+    // statuses : dataHandler.getStatuses(data=>data),
+
+    showBoards:async function (boards) {
+        let statuses = await dataHandler.getStatuses(data=>{console.log(data[0].id);return data})
+        console.log(statuses)
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
 
@@ -20,23 +25,23 @@ export let dom = {
 
         for (let board of boards) {
             boardList += `
-                <section class="board" id="${board.id}">
+                <section class="board" id="board-${board.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
-                <button class="board-add" id="add-new-card">Create new card</button>
+                <button class="board-add" data-board-id="${board.id}" id="add-new-card">Create new card</button>
                 <button type="button"  class="board-toggle" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
-            <div class="board-columns collapse" id="board${board.id}">
+<!--            <div class="board-columns collapse" id="board${board.id}"-->
             <div class="board-column">
-                    <div class="board-column-title" data-board-id="${board.id}" id="${statuses.id[0]}">${statuses.title[0]}</div>
+                    <div class="board-column-title" id="column-${board.id}-${statuses[0].id}">${statuses[0].title}</div>
                 </div>
                 <div class="board-column">
-                    <div class="board-column-title" id="${statuses.id[1]}">${statuses.title[0]}</div>
+                    <div class="board-column-title"  id="column-${board.id}-${statuses[1].id}">${statuses[1].title}</div>
                 </div>
                 <div class="board-column">
-                    <div class="board-column-title" id="${statuses.id[2]}">${statuses.title[0]}</div>
+                    <div class="board-column-title" id="column-${board.id}-${statuses[2].id}">${statuses[2].title}</div>
                 </div>
                 <div class="board-column">
-                    <div class="board-column-title" id="${statuses.id[3]}">${statuses.title[0]}</div>
+                    <div class="board-column-title"  id="column-${board.id}-${statuses[3].id}">${statuses[3].title}</div>
                 </div>
             </div>
             </section>
@@ -61,17 +66,17 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
     },
-    createNewCard: function () {
+    createNewCard: function (event) {
+        console.log(event)
         let inputText = window.prompt("Enter a card title : ");
-        let column = document.getElementById("new")
+        let column = document.getElementById(`column-${event.target.dataset["board-id"]}-0`)
         column.innerHTML +=
-            `<div className="card">
-                    <div className="card-remove"><i className="fas fa-trash-alt"></i></div>
-                    <div className="card-title">`
-        InputText`</div>
+            `<div class="card">
+                    <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                    <div class="card-title">${inputText}</div>
                 </div>`;
-        let boardId = column.dataset["boardId"]
-        dataHandler.createNewCard(inputText, boardId, 1, function () {
+        let boardId =  `board-${event.target.dataset["board-id"]}`
+        dataHandler.createNewCard(inputText, boardId, 0, function () {
             console.log("valami")
         })
         // creates new card, saves it and calls the callback function with its data
