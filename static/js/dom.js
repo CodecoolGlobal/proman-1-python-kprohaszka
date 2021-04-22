@@ -84,23 +84,23 @@ export let dom = {
         // refine it to match design template
         for (let card of cards) {
             if (card.status_id === 0) {
-                newCards += `<div class="card" draggable="true" id="card${card.id}" status="${card.status_id}"> 
+                newCards += `<div class="card" draggable="true" id="cardId-${card.id}-${card.status_id}"> 
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title">${card.title}</div>
                 </div>`
 
             } else if (card.status_id === 1) {
-                inprogressCards += `<div class="card" draggable="true" id="card${card.id}" status="${card.status_id}">
+                inprogressCards += `<div class="card" draggable="true" id="cardId-${card.id}-${card.status_id}">
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title">${card.title}</div>
                 </div>`
             } else if (card.status_id === 2) {
-                testingCards += `<div class="card" draggable="true" id="card${card.id}" status="${card.status_id}">
+                testingCards += `<div class="card" draggable="true" id="cardId-${card.id}-${card.status_id}">
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title">${card.title}</div>
                 </div>`
             } else if (card.status_id === 3) {
-                doneCards += `<div class="card" draggable="true" id="card${card.id}" status="${card.status_id}">
+                doneCards += `<div class="card" draggable="true" id="cardId-${card.id}-${card.status_id}">
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>                    
                     <div class="card-title">${card.title}</div>
                 </div>`
@@ -121,6 +121,7 @@ export let dom = {
                     <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title">${inputText}</div>
                 </div>`;
+        dom.dragAndDrop()
         dataHandler.createNewCard(inputText, boardId, 0, function () {
             console.log("valami")
         })
