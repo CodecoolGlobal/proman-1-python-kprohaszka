@@ -99,14 +99,20 @@ export let dom = {
             }
         }
         console.log(newCard)
-        const outerHtml = `
-            <div class="board-column" id="status0">
-                ${newCard}
+        let trial = [newCard, inprogressCard, testing, done] //this is way too magical but it works for now
+        for (let i = 0; i <= 3; i++){
+                    let outerHtml = `
+            <div class="board-column" id="status${i}">
+                ${trial[i]}
             </div>
             
         `;
-        let boardsContainer = document.getElementById('status0')
+                    let boardsContainer = document.getElementById('status'+[i])
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+        }
+
+
+
 
     },
     // here comes more features
