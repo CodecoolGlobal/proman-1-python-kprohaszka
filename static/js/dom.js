@@ -21,7 +21,7 @@ export let dom = {
             boardList += `
                 <section class="board" id="${board.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
-                <button class="board-add" id="add">Create new card</button>
+                <button class="board-add" id="add-new-card">Create new card</button>
                 <button type="button"  class="board-toggle" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns collapse" id="board${board.id}">
@@ -50,7 +50,7 @@ export let dom = {
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
-        document.getElementById("add").addEventListener("click", dom.createNewCard)
+        document.getElementById("add-new-card").addEventListener("click", dom.createNewCard)
 
     },
     loadCards: function (boardId) {
@@ -63,10 +63,16 @@ export let dom = {
     createNewCard: function () {
         let inputText = window.prompt("Enter a card title : ");
         let column = document.getElementById("new")
-            column.innerHTML +=
-            `<li class='card'><p>` + inputText + `</p></li>`;
+        column.innerHTML +=
+            `<div className="card">
+                    <div className="card-remove"><i className="fas fa-trash-alt"></i></div>
+                    <div className="card-title">`
+        InputText`</div>
+                </div>`;
         let boardId = column.dataset["boardId"]
-        dataHandler.createNewCard( inputText, boardId,1, function (){console.log("valami")})
+        dataHandler.createNewCard(inputText, boardId, 1, function () {
+            console.log("valami")
+        })
         // creates new card, saves it and calls the callback function with its data
     }
     // here comes more features
