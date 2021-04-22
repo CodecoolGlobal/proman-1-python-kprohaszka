@@ -84,23 +84,23 @@ export let dom = {
         // refine it to match design template
         for (let card of cards) {
             if (card.status_id === 0) {
-                newCards += `<div class="card" id="card${card.id}" status="${card.status_id}"> 
+                newCards += `<div class="card" draggable="true" id="card${card.id}" status="${card.status_id}"> 
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title">${card.title}</div>
                 </div>`
 
             } else if (card.status_id === 1) {
-                inprogressCards += `<div class="card" id="card${card.id}" status="${card.status_id}">
+                inprogressCards += `<div class="card" draggable="true" id="card${card.id}" status="${card.status_id}">
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title">${card.title}</div>
                 </div>`
             } else if (card.status_id === 2) {
-                testingCards += `<div class="card" id="card${card.id}" status="${card.status_id}">
+                testingCards += `<div class="card" draggable="true" id="card${card.id}" status="${card.status_id}">
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title">${card.title}</div>
                 </div>`
             } else if (card.status_id === 3) {
-                doneCards += `<div class="card" id="card${card.id}" status="${card.status_id}">
+                doneCards += `<div class="card" draggable="true" id="card${card.id}" status="${card.status_id}">
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>                    
                     <div class="card-title">${card.title}</div>
                 </div>`
@@ -110,13 +110,14 @@ export let dom = {
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="1"] .card-container`).innerHTML = inprogressCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="2"] .card-container`).innerHTML = testingCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="3"] .card-container`).innerHTML = doneCards
+        dom.dragAndDrop()
     },
     createNewCard: function (event) {
         const boardId = event.target.dataset.boardId
         let inputText = window.prompt("Enter a card title : ");
         let column = document.querySelector(`#column-${boardId}-0`)
         column.innerHTML +=
-            `<div class="card">
+            `<div class="card" draggable="true">
                     <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title">${inputText}</div>
                 </div>`;
@@ -140,4 +141,22 @@ export let dom = {
         boardsContainerKill.innerHTML = ``;
         dom.loadBoards();
     },
+    dragAndDrop: function (){
+        let draggables = document.querySelectorAll('.card')
+        let containers = document.querySelectorAll('.board-column')
+        draggables.forEach(draggable =>{
+            draggable.addEventListener('dragstart', () =>draggable.classList.add('dragging'))
+            draggable.addEventListener('dragend', () =>{draggable.classList.remove('dragging')
+            })
+        })
+        containers.forEach(container =>{
+            container.addEventListener('dragover', e =>
+                {
+                    e.preventDefault()
+                    let dragged = document.querySelector('.dragging')
+                    container.appendChild(dragged)
+                }
+            )
+        })
+    }
 };
