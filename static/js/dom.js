@@ -140,4 +140,14 @@ export let dom = {
         boardsContainerKill.innerHTML = ``;
         dom.loadBoards();
     },
+    sendRegistration: function () {
+        let registerForm = document.querySelector("#registrationForm")
+        registerForm.addEventListener("submit", (e) => dom.registerUser)
+
+    },
+    registerUser: function (e) {
+        e.preventDefault();
+        console.log("The form");
+
+    }
 };
