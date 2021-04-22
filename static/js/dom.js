@@ -22,26 +22,28 @@ export let dom = {
 
         for (let board of boards) {
             boardList += `
-                <section class="board" id="board-${board.id}">
+                <section className="board" id="${board.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
                 <button class="board-add" data-board-id="${board.id}" id="add-new-card">Create new card</button>
-                <button data-board-id="${board.id}" id="button_board${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
+                <p>this is"${board.id}"</p>
+                <button data-board-id="${board.id}" id="button_board${board.id}" type="button"  class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns collapse" id="board${board.id}">
             <div class="board-column" data-status="${statuses[0].id}" id="status${statuses[0].id}">
-                    <div class="board-column-title" id="column-${board.id}-${statuses[0].id}">${statuses[0].title}>${statuses[0].title}</div>
+                                        <div class="board-column-title">${statuses[0].title}</div>
+
                     <div class="card-container"></div>
                 </div>
                 <div class="board-column" data-status="${statuses[1].id}" id="status${statuses[1].id}">
-                    <div class="board-column-title"  id="column-${board.id}-${statuses[1].id}">${statuses[1].title}>${statuses[1].title}</div>
+                    <div class="board-column-title">${statuses[1].title}</div>
                     <div class="card-container"></div>
                 </div>
                 <div class="board-column" data-status="${statuses[2].id}" id="status${statuses[2].id}">
-                    <div class="board-column-title"  id="column-${board.id}-${statuses[2].id}">${statuses[2].title}>${statuses[2].title}</div>
+                    <div class="board-column-title">${statuses[2].title}</div>
                     <div class="card-container"></div>
                 </div>
                 <div class="board-column" data-status="${statuses[3].id}" id="status${statuses[3].id}">
-                    <div class="board-column-title" id="column-${board.id}-${statuses[3].id}">${statuses[3].title}>${statuses[3].title}</div>
+                    <div class="board-column-title">${statuses[3].title}</div>
                     <div class="card-container"></div>
                 </div>
             </div>
@@ -110,6 +112,7 @@ export let dom = {
         let boardId =  `${event.target.dataset["board-id"]}`
         console.log(boardId)
         let column =  document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="0"] .card-container`).innerHTML
+        console.log(column)
         column +=
             `<div class="card">
                     <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
