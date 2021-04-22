@@ -18,7 +18,7 @@ export let dom = {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
         let boardList = '';
-
+        let i = 0;
         for (let board of boards) {
             boardList += `
                 <section class="board" id="${boards.id}">
@@ -76,31 +76,36 @@ export let dom = {
         for (let card of cards) {
             if (card.status_id == 0) {
                 newCard += `<div className="card" id="${card.id}" status="${card.status_id}">
-                    <div className="card-remove"><i className="fas fa-trash-alt"></i></div>
                     <div className="card-title">${card.title}</div>
                 </div>`
 
                 console.log("Done")
             } else if (card.status_id == 1) {
                 inprogressCard += `<div className="card" id="${card.id}" status="${card.status_id}">
-                    <div className="card-remove"><i className="fas fa-trash-alt"></i></div>
                     <div className="card-title">${card.title}</div>
                 </div>`
             }
             else if (card.status_id == 2) {
                 testing += `<div className="card" id="${card.id}" status="${card.status_id}">
-                    <div className="card-remove"><i className="fas fa-trash-alt"></i></div>
                     <div className="card-title">${card.title}</div>
                 </div>`
             }
             else if (card.status_id == 3) {
-                done += `<div className="card" id="${card.id}" status="${card.status_id}">
-                    <div className="card-remove"><i className="fas fa-trash-alt"></i></div>
+                done += `<div className="card" id="${card.id}" status="${card.status_id}">                    
                     <div className="card-title">${card.title}</div>
                 </div>`
             }
         }
         console.log(newCard)
+        const outerHtml = `
+            <div class="board-column" id="status0">
+                ${newCard}
+            </div>
+            
+        `;
+        let boardsContainer = document.getElementById('status0')
+        boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+
     },
     // here comes more features
 };
