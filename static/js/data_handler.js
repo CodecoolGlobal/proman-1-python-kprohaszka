@@ -76,5 +76,10 @@ export let dataHandler = {
             dataHandler._api_post("/create-card", data, (response) => {
                 callback(response)
             })},
+    saveCards: function (cards, callback){
+        let data = {cards};
+            dataHandler._api_post("/save", data, (response) => {
+                callback(response)
+            })},
     // here comes more features
 };
