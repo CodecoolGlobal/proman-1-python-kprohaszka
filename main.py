@@ -100,5 +100,12 @@ def add_new_card():
     data_handler.add_new_card(data["board_id"], data["card_title"], data["status_id"])
 
 
+@app.route("/rename-card", methods=["POST"])
+def rename_card_save():
+    cards = data_handler.get_cards()
+    data = request.json
+
+
+
 if __name__ == '__main__':
     main()

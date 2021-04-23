@@ -82,6 +82,7 @@ export let dom = {
         let testingCards = '';
         let doneCards = '';
         // refine it to match design template
+
         for (let card of cards) {
             if (card.status_id === 0) {
                 newCards += `<div class="card" id="card${card.id}" status="${card.status_id}"> 
@@ -111,6 +112,7 @@ export let dom = {
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="2"] .card-container`).innerHTML = testingCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="3"] .card-container`).innerHTML = doneCards
     },
+
     createNewCard: function (event) {
         const boardId = event.target.dataset.boardId
         let inputText = window.prompt("Enter a card title : ");
@@ -118,8 +120,16 @@ export let dom = {
         column.innerHTML +=
             `<div class="card">
                     <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title">${inputText}</div>
+                    <div id="thetext" class="card-title">${inputText}</div>
+                      <div id="editor">
+                        <textarea id="ta1" name="ta1" rows="1" cols="10"></textarea><br />
+                        <input name="submit" id="submit" type="button" value="Save Text" />
+                    </div>
+                    
                 </div>`;
+
+        document.getElementById("submit").addEventListener("click", dom.doEdit)
+        document.getElementById("thetext").addEventListener("click", dom.toggleEditor)
         dataHandler.createNewCard(inputText, boardId, 0, function () {
             console.log("valami")
         })
@@ -127,10 +137,12 @@ export let dom = {
     },
     // here comes more features
     // ADD Board
+
     addBoardButtonToggle: function () {
         let addBoardButton = document.getElementById('add-board');
         addBoardButton.addEventListener('click', this.createBoard);
     },
+
     createBoard: function () {
         let titleInput = window.prompt("Board name?");
         dataHandler.createNewBoard(titleInput, function () {
@@ -140,4 +152,33 @@ export let dom = {
         boardsContainerKill.innerHTML = ``;
         dom.loadBoards();
     },
+
+
+    toggleEditor: function () {
+        var theText = document.getElementById('thetext');
+        var theEditor = document.getElementById('ta1');
+        var editorArea = document.getElementById('editor');
+        var subject = theText.innerHTML;
+        subject = subject.replace(new RegExp("<br />", "gi"), 'n');
+        subject = subject.replace(new RegExp("<br />", "gi"), 'n');
+        subject = subject.replace(new RegExp("<", "gi"), '<');
+        subject = subject.replace(new RegExp(">", "gi"), '>');
+        theEditor.value = subject;
+        theText.style.display = 'none';
+        editorArea.style.display = 'inline';
+    },
+
+
+    doEdit: function () {
+        var theText = document.getElementById('thetext');
+        var theEditor = document.getElementById('ta1');
+        var editorArea = document.getElementById('editor');
+        var subject = theEditor.value;
+        subject = subject.replace(new RegExp("<", "g"), '<');
+        subject = subject.replace(new RegExp(">", "g"), '>');
+        subject = subject.replace(new RegExp("n", "g"), '<br />');
+        theText.innerHTML = subject;
+        theText.style.display = 'inline';
+        editorArea.style.display = 'none';
+    }
 };
