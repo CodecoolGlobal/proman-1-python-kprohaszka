@@ -134,20 +134,19 @@ export let dom = {
     createBoard: function () {
         let titleInput = window.prompt("Board name?");
         dataHandler.createNewBoard(titleInput, function () {
-            console.log(titleInput)
+            let boardsContainerKill = document.getElementById("boards");
+            boardsContainerKill.innerHTML = ``;
+            dom.loadBoards();
         });
-        let boardsContainerKill = document.getElementById("boards");
-        boardsContainerKill.innerHTML = ``;
-        dom.loadBoards();
     },
     sendRegistration: function () {
-        let registerForm = document.querySelector("#registrationForm")
-        registerForm.addEventListener("submit", (e) => dom.registerUser)
+        let registerFormButton = document.querySelector("#registerSubmitButton")
+        registerFormButton.addEventListener("click", (e) => dom.registerUser(e))
 
     },
     registerUser: function (e) {
         e.preventDefault();
-        console.log("The form");
+        console.log(e.target.form);
 
     }
 };

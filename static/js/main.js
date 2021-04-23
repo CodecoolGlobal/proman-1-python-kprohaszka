@@ -8,6 +8,8 @@ function init() {
     dom.loadBoards();
     // adds boards to the table when clicked
     dom.addBoardButtonToggle()
+    // adds registration button event
+    dom.sendRegistration()
 }
 
 window.onload = init
