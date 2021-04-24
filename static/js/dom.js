@@ -142,36 +142,36 @@ export let dom = {
         boardsContainerKill.innerHTML = ``;
         dom.loadBoards();
     },
-    dragAndDrop: function (boardId){
+    dragAndDrop: function (boardId) {
         let draggables = document.querySelectorAll('.card')
         let containers = document.querySelectorAll('.board-column')
-        draggables.forEach(draggable =>{
-            draggable.addEventListener('dragstart', () =>draggable.classList.add('dragging'))
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'))
 
-            draggable.addEventListener('dragend', () =>{draggable.classList.remove('dragging')
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging')
 
-                    dataHandler.saveCards(draggable.id,function (){
+                dataHandler.saveCards(draggable.id, function () {
 
 
-                        dom.loadCards(boardId)
-                    })
+                    dom.loadCards(boardId)
+                })
             })
         })
-        containers.forEach(container =>{
-            container.addEventListener('dragover', e =>
-                {
+        containers.forEach(container => {
+            container.addEventListener('dragover', e => {
                     e.preventDefault()
                     let dragged = document.querySelector('.dragging')
                     //container.appendChild(dragged)
 
-                    let tmp = dragged.id.slice(0,9)
+                    let tmp = dragged.id.slice(0, 9)
                     let tmp2 = container.getAttribute('data-status')
                     console.log(tmp2)
-                    dragged.id = tmp+tmp2
+                    dragged.id = tmp + tmp2
 
 
                 }
             )
         })
-    }
+    },
 };

@@ -16,20 +16,20 @@ export let dataHandler = {
             .then(response => response.json())  // parse the response as JSON
             .then(json_response => callback(json_response));  // Call the `callback` with the returned object
     },
-        _api_post: function (url, data, callback) {
-            fetch(url, {
-                method: 'POST',
-                credentials: 'same-origin',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            })
-                .then(response => response.json())  // parse the response as JSON
-                .then(json_response => callback(json_response));  // Call the `callback` with the returned object
-            // it is not called from outside
-            // sends the data to the API, and calls callback function
+    _api_post: function (url, data, callback) {
+        fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        })
+            .then(response => response.json())  // parse the response as JSON
+            .then(json_response => callback(json_response));  // Call the `callback` with the returned object
+        // it is not called from outside
+        // sends the data to the API, and calls callback function
     },
     init: function () {
     },
@@ -72,14 +72,16 @@ export let dataHandler = {
         });
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
-            let data = {"card_title": cardTitle, "board_id": boardId, "status_id": statusId};
-            dataHandler._api_post("/create-card", data, (response) => {
-                callback(response)
-            })},
-    saveCards: function (cards, callback){
+        let data = {"card_title": cardTitle, "board_id": boardId, "status_id": statusId};
+        dataHandler._api_post("/create-card", data, (response) => {
+            callback(response)
+        })
+    },
+    saveCards: function (cards, callback) {
         let data = {cards};
-            dataHandler._api_post("/save", data, (response) => {
-                callback(response)
-            })},
+        dataHandler._api_post("/save", data, (response) => {
+            callback(response)
+        })
+    },
     // here comes more features
 };
