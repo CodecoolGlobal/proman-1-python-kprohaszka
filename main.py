@@ -60,15 +60,14 @@ def get_cards_for_board(board_id: int):
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        usr_name = request.form['usr_name']
-        password = request.form['password']
-        hashed_pass = data_handler.get_usr_credentials(usr_name)
-        if util.verify_password(password, hashed_pass['password']):
-            session['user'] = usr_name
-            return render_template('index.html')
+    usr_name = request.json['username']
+    password = util.hash_password(request.json['password'])
+    hashed_pass = data_handler.get_usr_credentials(usr_name)
+    if util.verify_password(password, hashed_pass['password']):
+        session['user'] = usr_name
+        # return SOMETHING TO RENDER BY
     else:
-        return render_template('index.html')
+        # return SOMETHING ELSE TO RENDER BY
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -80,9 +79,9 @@ def register():
             user = data_handler.register_usr(usr_name, password)
             return {"OK": True, "username": user["username"]}
         except Error:
-            return {"OK": str(Error)}
+            return {"OK": "Username already exists"}
     else:
-    return {"OK": "Please fill out both username, and password"}
+        return {"OK": "Please fill out both username, and password"}
 
 
 @app.route('/logout')

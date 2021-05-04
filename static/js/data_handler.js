@@ -53,8 +53,11 @@ export let dataHandler = {
             callback(response);
         });
     },
+    loginUser: function (username, password, callback){
+
+    },
     getLoginBoards: function (boardId, callback) {
-        this._api_get(`/get-boars/${boardId}`, (response) => {
+        this._api_get(`/get-boards/${boardId}`, (response) => {
             this._data['boards'] = response;
             callback(response);
     });

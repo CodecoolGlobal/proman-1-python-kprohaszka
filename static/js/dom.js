@@ -140,7 +140,7 @@ export let dom = {
         });
     },
     sendRegistration: function () {
-        let registerForm = document.querySelector("#registrationForm")
+        const registerForm = document.querySelector("#registrationForm")
         registerForm.addEventListener("submit", (e) => dom.registerUserHandler(e))
 
     },
@@ -156,8 +156,17 @@ export let dom = {
                 alert(response.OK)
             }
         });
-
-
-
     },
+    sendLogin: function () {
+        const loginForm = document.querySelector("#loginForm")
+        loginForm.addEventListener("submit", (e)=>dom.loginHandler(e))
+    }
+    loginHandler: function (e) {
+        console.log(e.target)
+        const username = e.target.register_user_name.value
+        const password = e.target.register_password.value
+        dataHandler.loginUser(username, password, (response)=>{
+            // SomePrivate tabel magic
+        })
+    }
 };
