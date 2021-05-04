@@ -46,6 +46,19 @@ export let dataHandler = {
     getBoard: function (boardId, callback) {
         // the board is retrieved and then the callback function is called with the board
     },
+    registerUser: function (username, password, callback) {
+        let data = {"username": username, "password": password};
+        dataHandler._api_post("/register", data, (response) => {
+            console.log(response)
+            callback(response);
+        });
+    },
+    getLoginBoards: function (boardId, callback) {
+        this._api_get(`/get-boars/${boardId}`, (response) => {
+            this._data['boards'] = response;
+            callback(response);
+    });
+    },
     getStatuses: function (callback) {
         this._api_get('/get-statuses', (response) => {
             this._data['statuses'] = response;

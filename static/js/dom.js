@@ -140,13 +140,24 @@ export let dom = {
         });
     },
     sendRegistration: function () {
-        let registerFormButton = document.querySelector("#registerSubmitButton")
-        registerFormButton.addEventListener("click", (e) => dom.registerUser(e))
+        let registerForm = document.querySelector("#registrationForm")
+        registerForm.addEventListener("submit", (e) => dom.registerUserHandler(e))
 
     },
-    registerUser: function (e) {
+    registerUserHandler: function (e) {
         e.preventDefault();
-        console.log(e.target.form);
+        console.log(e.target)
+        const username = e.target.register_user_name.value
+        const password = e.target.register_password.value
+        dataHandler.registerUser(username, password, (response)=>{
+            if (response.OK === true){
+            alert(`You have successfully registered ${response.username}`)
+            } else {
+                alert(response.OK)
+            }
+        });
 
-    }
+
+
+    },
 };

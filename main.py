@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, make_response, session, escape, current_app
 import util
 import data_handler
+from psycopg2 import Error
 
 app = Flask(__name__)
 app.secret_key = b'super_secret_key'
@@ -72,10 +73,16 @@ def login():
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
-    usr_name = request.form['usr_name']
-    password = util.hash_password(request.form['password'])
-    data_handler.register_usr(usr_name, password)
-    return render_template('index.html')
+    usr_name = request.json['username']
+    password = util.hash_password(request.json['password'])
+    if usr_name and password:
+        try:
+            user = data_handler.register_usr(usr_name, password)
+            return {"OK": True, "username": user["username"]}
+        except Error:
+            return {"OK": str(Error)}
+    else:
+    return {"OK": "Please fill out both username, and password"}
 
 
 @app.route('/logout')

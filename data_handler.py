@@ -52,10 +52,11 @@ def create_new_board(cursor: RealDictCursor, title):
 def register_usr(cursor: RealDictCursor, usr_name, password):
     query = """
         INSERT INTO users (username, password)
-        VALUES (%(name)s, %(pass)s);
+        VALUES (%(name)s, %(pass)s) RETURNING username;
         """
     var = {'name': usr_name, 'pass': password}
     cursor.execute(query, var)
+    return cursor.fetchone()
 
 
 @database_common.connection_handler
