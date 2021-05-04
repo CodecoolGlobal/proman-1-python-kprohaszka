@@ -16,20 +16,20 @@ export let dataHandler = {
             .then(response => response.json())  // parse the response as JSON
             .then(json_response => callback(json_response));  // Call the `callback` with the returned object
     },
-        _api_post: function (url, data, callback) {
-            fetch(url, {
-                method: 'POST',
-                credentials: 'same-origin',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            })
-                .then(response => response.json())  // parse the response as JSON
-                .then(json_response => callback(json_response));  // Call the `callback` with the returned object
-            // it is not called from outside
-            // sends the data to the API, and calls callback function
+    _api_post: function (url, data, callback) {
+        fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        })
+            .then(response => response.json())  // parse the response as JSON
+            .then(json_response => callback(json_response));  // Call the `callback` with the returned object
+        // it is not called from outside
+        // sends the data to the API, and calls callback function
     },
     init: function () {
     },
@@ -53,14 +53,17 @@ export let dataHandler = {
             callback(response);
         });
     },
-    loginUser: function (username, password, callback){
-
-    },
-    getLoginBoards: function (boardId, callback) {
-        this._api_get(`/get-boards/${boardId}`, (response) => {
-            this._data['boards'] = response;
+    loginUser: function (username, password, callback) {
+        let data = {"username": username, "password": password};
+        dataHandler._api_post("/login", data, (response) => {
             callback(response);
-    });
+        });
+    },
+    getLoggedInBoards: function (user_id, callback) {
+        this._api_get(`/get-boards/${user_id}`, (response) => {
+            this._data['privateBoards'] = response;
+            callback(response);
+        });
     },
     getStatuses: function (callback) {
         this._api_get('/get-statuses', (response) => {
@@ -88,9 +91,10 @@ export let dataHandler = {
         });
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
-            let data = {"card_title": cardTitle, "board_id": boardId, "status_id": statusId};
-            dataHandler._api_post("/create-card", data, (response) => {
-                callback(response)
-            })},
+        let data = {"card_title": cardTitle, "board_id": boardId, "status_id": statusId};
+        dataHandler._api_post("/create-card", data, (response) => {
+            callback(response)
+        })
+    },
     // here comes more features
 };

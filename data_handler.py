@@ -21,6 +21,7 @@ def get_boards(cursor: RealDictCursor) -> list:
     query = """
             SELECT *
             FROM boards
+            WHERE user_id IS null
             """
     cursor.execute(query)
     return cursor.fetchall()
@@ -79,3 +80,26 @@ def add_new_card(cursor: RealDictCursor, board_id: int, title: str, status_id):
     """
     args = {'board_id': board_id, 'title': title, 'status_id': status_id}
     cursor.execute(query, args)
+
+
+@database_common.connection_handler
+def get_user_id(cursor: RealDictCursor, usr_name):
+    query = """
+        SELECT id
+        FROM users
+        WHERE username = %(name)s;
+        """
+    var = {'name': usr_name}
+    cursor.execute(query, var)
+    return cursor.fetchone()
+
+@database_common.connection_handler
+def get_private_boards(cursor: RealDictCursor, user_id) -> list:
+    query = """
+            SELECT *
+            FROM boards
+            WHERE user_id = %(user_id)s
+            """
+    usr_id = {"user_id": user_id}
+    cursor.execute(query, usr_id)
+    return cursor.fetchall()

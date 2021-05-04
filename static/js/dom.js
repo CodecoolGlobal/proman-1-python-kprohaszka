@@ -146,27 +146,105 @@ export let dom = {
     },
     registerUserHandler: function (e) {
         e.preventDefault();
-        console.log(e.target)
-        const username = e.target.register_user_name.value
-        const password = e.target.register_password.value
-        dataHandler.registerUser(username, password, (response)=>{
-            if (response.OK === true){
-            alert(`You have successfully registered ${response.username}`)
+        console.log(e.target);
+        const username = e.target.register_user_name.value;
+        const password = e.target.register_password.value;
+        dataHandler.registerUser(username, password, (response) => {
+            if (response.OK === true) {
+
+                alert(`You have successfully registered ${response.username}`)
             } else {
                 alert(response.OK)
             }
         });
     },
+    loadPrivateBoards: function (user_id) {
+        // retrieves boards and makes showBoards called
+        dataHandler.getLoggedInBoards(user_id, function (privateBoards) {
+            dataHandler.getStatuses(function (statuses) {
+                dom.showBoards(privateBoards, statuses);
+            })
+        });
+
+    },
     sendLogin: function () {
         const loginForm = document.querySelector("#loginForm")
-        loginForm.addEventListener("submit", (e)=>dom.loginHandler(e))
-    }
+        loginForm.addEventListener("submit", (e) => dom.loginHandler(e))
+    },
     loginHandler: function (e) {
+        e.preventDefault();
         console.log(e.target)
-        const username = e.target.register_user_name.value
-        const password = e.target.register_password.value
-        dataHandler.loginUser(username, password, (response)=>{
-            // SomePrivate tabel magic
+        const username = e.target.login_user_name.value
+        const password = e.target.login_password.value
+        dataHandler.loginUser(username, password, (response) => {
+            if (response.OK === true) {
+                dom.loadPrivateBoards(response.user_id)
+                dom.renderLoggedInNavbar(response.username)
+                dom.addLogoutListener()
+                dom.addBoardButtonToggle()
+            } else {
+                alert(response.OK)
+            }
         })
-    }
+    },
+    renderLoggedOutNavbar: function () {
+        let nbar = document.getElementById("navBar")
+
+        nbar.innerHTML = `<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <button type="button" id="add-board" class="btn btn-dark">+ Create new board +</button>
+
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button"
+                        class="btn btn-secondary dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    login/register
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <button id="loginButton" type="button" class="dropdown-item" data-toggle="modal"
+                            data-target="#login">
+                        login
+                    </button>
+                    <button type="button" class="dropdown-item" data-toggle="modal"
+                            data-target="#register">
+                        register
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="shadow p-2 mb-3 bg-light rounded">
+            PUBLIC
+        </div>`
+    },
+
+    renderLoggedInNavbar: function (usrName) {
+        let nbar = document.getElementById("navBar")
+
+        nbar.innerHTML = `<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <button type="button" id="add-board" class="btn btn-dark">+ Create new board +</button>
+
+            <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button"
+                            class="btn btn-secondary dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        login/register
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <button id="logoutButton" type="button" class="dropdown-item">
+                            logout
+                        </button>
+                        <button type="button" class="dropdown-item" data-toggle="modal"
+                                data-target="#register">
+                            register
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="shadow p-2 mb-3 bg-light rounded">
+                ${usrName}
+            </div>`
+    },
+    addLogoutListener: function() {
+    let logout = document.getElementById("logoutButton")
+    logout.addEventListener("click", (e) => usrLogout(e))
+}
 };

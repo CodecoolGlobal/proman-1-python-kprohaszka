@@ -25,6 +25,15 @@ def get_boards():
     return data_handler.get_boards()
 
 
+@app.route("/get-boards/<user_id>")
+@util.json_response
+def get_private_boards(user_id):
+    """
+    All the boards
+    """
+    return data_handler.get_private_boards(user_id)
+
+
 @app.route("/get-statuses")
 @util.json_response
 def get_statuses():
@@ -63,11 +72,12 @@ def login():
     usr_name = request.json['username']
     password = util.hash_password(request.json['password'])
     hashed_pass = data_handler.get_usr_credentials(usr_name)
+    user_id = data_handler.get_user_id(usr_name)
     if util.verify_password(password, hashed_pass['password']):
         session['user'] = usr_name
-        # return SOMETHING TO RENDER BY
+        return {"OK": True, "user_id": user_id, "username": usr_name}
     else:
-        # return SOMETHING ELSE TO RENDER BY
+        return {"OK": "The username, or password does not match!"}
 
 
 @app.route('/register', methods=["GET", "POST"])
