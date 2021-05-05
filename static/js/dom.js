@@ -165,18 +165,13 @@ export let dom = {
             draggable.addEventListener('dragend', () => {
                 draggable.classList.remove('dragging')
 
-                dataHandler.saveCards(draggable.id, function () {
-
-
-                    dom.loadCards(boardId)
-                })
             })
         })
         containers.forEach(container => {
             container.addEventListener('dragover', e => {
                     e.preventDefault()
                     let dragged = document.querySelector('.dragging')
-                    //container.appendChild(dragged)
+                    container.appendChild(dragged)
 
                     let tmp = dragged.id.slice(0, 9)
                     let tmp2 = container.getAttribute('data-status')
