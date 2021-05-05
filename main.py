@@ -104,13 +104,24 @@ def add_new_card():
 @util.json_response
 def save_status():
     data = request.json
-    info=data.get('cards')
-    n=[]
+    info = data.get('cards')
+    n = []
     for i in info:
         if str(i).isdigit():
             n.append(i)
     print(n)
-    data_handler.save_changed_card(n[0],n[1])
+    data_handler.save_changed_card(n[0], n[1])
+
+
+@app.route("/rename-column", methods=["POST"])
+@util.json_response
+def rename_column():
+    data = request.json
+    print(data)
+    old_column_title = data['old_column_title']
+    new_column_title = data['new_column_title']
+    data_handler.rename_column(old_column_title, new_column_title)
+
 
 if __name__ == '__main__':
     main()

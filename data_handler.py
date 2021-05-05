@@ -79,6 +79,7 @@ def add_new_card(cursor: RealDictCursor, board_id: int, title: str, status_id):
     args = {'board_id': board_id, 'title': title, 'status_id': status_id}
     cursor.execute(query, args)
 
+
 @database_common.connection_handler
 def save_changed_card(cursor: RealDictCursor, card_id:int, status_id:int):
     query = """
@@ -88,3 +89,14 @@ def save_changed_card(cursor: RealDictCursor, card_id:int, status_id:int):
     """
     args = {'card_id': card_id, 'status_id': status_id}
     cursor.execute(query, args)
+
+
+@database_common.connection_handler
+def rename_column(cursor: RealDictCursor, old_column_title: str, new_column_title: str):
+    query = """
+            UPDATE statuses
+            SET title = %(new_column_title)s
+            WHERE title = %(old_column_title)s 
+            """
+    values =  {'old_column_title':old_column_title, 'new_column_title':new_column_title}
+    cursor.execute(query, values)

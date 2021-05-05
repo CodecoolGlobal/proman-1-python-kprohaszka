@@ -13,6 +13,7 @@ export let dom = {
             })
         });
 
+
     },
     showBoards: function (boards, statuses) {
         // shows boards appending them to #boards div
@@ -29,19 +30,19 @@ export let dom = {
             </div>
             <div class="board-columns collapse" id="board${board.id}">
             <div class="board-column" data-status="${statuses[0].id}" id="status${statuses[0].id}">
-                    <div class="board-column-title">${statuses[0].title}</div>
+                    <div class="board-column-title" data-board-id="${board.id}">${statuses[0].title}</div>
                     <div class="card-container" id="column-${board.id}-${statuses[0].id}"></div>
                 </div>
                 <div class="board-column" data-status="${statuses[1].id}" id="status${statuses[1].id}">
-                    <div class="board-column-title">${statuses[1].title}</div>
+                    <div class="board-column-title" data-board-id="${board.id}">${statuses[1].title}</div>
                     <div class="card-container" id="column-${board.id}-${statuses[1].id}"></div>
                 </div>
                 <div class="board-column" data-status="${statuses[2].id}" id="status${statuses[2].id}">
-                    <div class="board-column-title">${statuses[2].title}</div>
+                    <div class="board-column-title" data-board-id="${board.id}">${statuses[2].title}</div>
                     <div class="card-container" id="column-${board.id}-${statuses[2].id}"></div>
                 </div>
                 <div class="board-column" data-status="${statuses[3].id}" id="status${statuses[3].id}">
-                    <div class="board-column-title">${statuses[3].title}</div>
+                    <div class="board-column-title" data-board-id="${board.id}">${statuses[3].title}</div>
                     <div class="card-container" id="column-${board.id}-${statuses[3].id}"></div>
                 </div>
             </div>
@@ -64,6 +65,24 @@ export let dom = {
         for (let button of document.querySelectorAll(".card-add-btn")) {
             button.addEventListener("click", dom.createNewCard)
         }
+        ;
+        let boardTitles = document.querySelectorAll('.board-column-title');
+        for (let boardTitle of boardTitles) {
+            boardTitle.addEventListener("click", () => dom.renameColumns(event, boardTitle))
+        }
+    },
+
+    renameColumns: function (event, boardTitle) {
+        const boardId = event.target.dataset.boardId
+        console.log(boardId)
+        let oldColumnTitle = boardTitle.innerHTML
+        let newColumnTitle = prompt("Edit column name:", `${oldColumnTitle}`)
+        dataHandler.renameColumn(oldColumnTitle, newColumnTitle, function () {
+            console.log(newColumnTitle)
+        })
+        let boardsContainerKill = document.getElementById("boards");
+        boardsContainerKill.innerHTML = ``;
+        dom.loadBoards()
     },
 
 
@@ -142,32 +161,32 @@ export let dom = {
         boardsContainerKill.innerHTML = ``;
         dom.loadBoards();
     },
-    dragAndDrop: function (boardId){
+    dragAndDrop: function (boardId) {
         let draggables = document.querySelectorAll('.card')
         let containers = document.querySelectorAll('.board-column')
-        draggables.forEach(draggable =>{
-            draggable.addEventListener('dragstart', () =>draggable.classList.add('dragging'))
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'))
 
-            draggable.addEventListener('dragend', () =>{draggable.classList.remove('dragging')
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging')
 
-                    dataHandler.saveCards(draggable.id,function (){
+                dataHandler.saveCards(draggable.id, function () {
 
 
-                        dom.loadCards(boardId)
-                    })
+                    dom.loadCards(boardId)
+                })
             })
         })
-        containers.forEach(container =>{
-            container.addEventListener('dragover', e =>
-                {
+        containers.forEach(container => {
+            container.addEventListener('dragover', e => {
                     e.preventDefault()
                     let dragged = document.querySelector('.dragging')
                     //container.appendChild(dragged)
 
-                    let tmp = dragged.id.slice(0,9)
+                    let tmp = dragged.id.slice(0, 9)
                     let tmp2 = container.getAttribute('data-status')
                     console.log(tmp2)
-                    dragged.id = tmp+tmp2
+                    dragged.id = tmp + tmp2
 
 
                 }
