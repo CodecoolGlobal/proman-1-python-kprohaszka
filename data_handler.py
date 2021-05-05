@@ -63,7 +63,7 @@ def register_usr(cursor: RealDictCursor, usr_name, password):
 @database_common.connection_handler
 def get_usr_credentials(cursor: RealDictCursor, usr_name):
     query = """
-        SELECT password
+        SELECT CONVERT_FROM(password, 'UTF8') AS password 
         FROM users
         WHERE username = %(name)s;
         """
