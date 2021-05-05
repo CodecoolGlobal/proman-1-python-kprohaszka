@@ -101,4 +101,8 @@ export let dataHandler = {
                 callback(response)
             })},
     // here comes more features
+    getSession: function () {
+        return fetch("/get-session") 
+        .then(response => response.json())
+        }
 };
