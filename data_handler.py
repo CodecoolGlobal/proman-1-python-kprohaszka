@@ -78,3 +78,12 @@ def add_new_card(cursor: RealDictCursor, board_id: int, title: str, status_id):
     """
     args = {'board_id': board_id, 'title': title, 'status_id': status_id}
     cursor.execute(query, args)
+
+
+@database_common.connection_handler
+def card_title(cursor: RealDictCursor ,id, title):
+    query = """
+        UPDATE statuses SET title = %(title)s WHERE id = %(id)s;
+    """
+    values = {'id': id,'title':title}
+    cursor.execute(query, values)

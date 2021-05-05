@@ -87,26 +87,27 @@ export let dom = {
             if (card.status_id === 0) {
                 newCards += `<div class="card" id="card${card.id}" status="${card.status_id}"> 
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title">${card.title}</div>
+                    <div data-card-id="${card.id}" id="${card.id}" class="card-title">${card.title}</div>
                 </div>`
 
             } else if (card.status_id === 1) {
                 inprogressCards += `<div class="card" id="card${card.id}" status="${card.status_id}">
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title">${card.title}</div>
+                    <div data-card-id="${card.id}" class="card-title">${card.title}</div>
                 </div>`
             } else if (card.status_id === 2) {
                 testingCards += `<div class="card" id="card${card.id}" status="${card.status_id}">
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title">${card.title}</div>
+                    <div data-card-id="${card.id}" class="card-title">${card.title}</div>
                 </div>`
             } else if (card.status_id === 3) {
                 doneCards += `<div class="card" id="card${card.id}" status="${card.status_id}">
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>                    
-                    <div class="card-title">${card.title}</div>
+                    <div data-card-id="${card.id}" class="card-title">${card.title}</div>
                 </div>`
             }
         }
+
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="0"] .card-container`).innerHTML = newCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="1"] .card-container`).innerHTML = inprogressCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="2"] .card-container`).innerHTML = testingCards
@@ -125,9 +126,7 @@ export let dom = {
                         <textarea id="ta1" name="ta1" rows="1" cols="10"></textarea><br />
                         <input name="submit" id="submit" type="button" value="Save Text" />
                     </div>
-                    
                 </div>`;
-
         document.getElementById("submit").addEventListener("click", dom.doEdit)
         document.getElementById("thetext").addEventListener("click", dom.toggleEditor)
         dataHandler.createNewCard(inputText, boardId, 0, function () {
@@ -148,17 +147,18 @@ export let dom = {
         dataHandler.createNewBoard(titleInput, function () {
             console.log(titleInput)
         });
+
         let boardsContainerKill = document.getElementById("boards");
         boardsContainerKill.innerHTML = ``;
         dom.loadBoards();
     },
 
 
-    toggleEditor: function () {
-        var theText = document.getElementById('thetext');
-        var theEditor = document.getElementById('ta1');
-        var editorArea = document.getElementById('editor');
-        var subject = theText.innerHTML;
+    toggleEditor: function (event) {
+        let theText = document.getElementById('thetext');
+        let theEditor = document.getElementById('ta1');
+        let editorArea = document.getElementById('editor');
+        let subject = theText.innerHTML;
         subject = subject.replace(new RegExp("<br />", "gi"), 'n');
         subject = subject.replace(new RegExp("<br />", "gi"), 'n');
         subject = subject.replace(new RegExp("<", "gi"), '<');
@@ -169,16 +169,19 @@ export let dom = {
     },
 
 
-    doEdit: function () {
-        var theText = document.getElementById('thetext');
-        var theEditor = document.getElementById('ta1');
-        var editorArea = document.getElementById('editor');
-        var subject = theEditor.value;
+    doEdit: function (event) {
+        let id = event.target.dataset.cardId
+        let title = document.getElementById('thetext');
+        let theEditor = document.getElementById('ta1');
+        console.log(id)
+        let editorArea = document.getElementById('editor');
+        let subject = theEditor.value;
         subject = subject.replace(new RegExp("<", "g"), '<');
         subject = subject.replace(new RegExp(">", "g"), '>');
         subject = subject.replace(new RegExp("n", "g"), '<br />');
-        theText.innerHTML = subject;
-        theText.style.display = 'inline';
+        title.innerHTML = subject;
+        title.style.display = 'inline';
         editorArea.style.display = 'none';
+        dataHandler.renameCards(id,title)
     }
 };

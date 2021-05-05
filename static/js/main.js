@@ -7,7 +7,8 @@ function init() {
     // loads the boards to the screen
     dom.loadBoards();
     // adds boards to the table when clicked
-    dom.addBoardButtonToggle()
+    dom.addBoardButtonToggle();
+
 }
 
 window.onload = init
