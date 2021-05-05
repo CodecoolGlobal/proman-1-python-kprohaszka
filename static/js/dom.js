@@ -27,24 +27,16 @@ export let dom = {
                 <button class="card-add-btn" data-board-id="${board.id}" id="add-new-card">Create new card</button>
                 <button data-board-id="${board.id}" id="button_board${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
-            <div class="board-columns collapse" id="board${board.id}">
-            <div class="board-column" data-status="${statuses[0].id}" id="status${statuses[0].id}">
-                    <div class="board-column-title">${statuses[0].title}</div>
-                    <div class="card-container" id="column-${board.id}-${statuses[0].id}"></div>
+            <div class="board-columns collapse" id="board${board.id}">`
+            for (let status of statuses) {
+                boardList += `
+            <div class="board-column" data-status="${status.id}" id="status${status.id}">
+                    <div class="board-column-title">${status.title}</div>
+                    <div class="card-container" id="column-${board.id}-${status.id}"></div>
+                </div>`
+            }
+            boardList += `
                 </div>
-                <div class="board-column" data-status="${statuses[1].id}" id="status${statuses[1].id}">
-                    <div class="board-column-title">${statuses[1].title}</div>
-                    <div class="card-container" id="column-${board.id}-${statuses[1].id}"></div>
-                </div>
-                <div class="board-column" data-status="${statuses[2].id}" id="status${statuses[2].id}">
-                    <div class="board-column-title">${statuses[2].title}</div>
-                    <div class="card-container" id="column-${board.id}-${statuses[2].id}"></div>
-                </div>
-                <div class="board-column" data-status="${statuses[3].id}" id="status${statuses[3].id}">
-                    <div class="board-column-title">${statuses[3].title}</div>
-                    <div class="card-container" id="column-${board.id}-${statuses[3].id}"></div>
-                </div>
-            </div>
             </section>
             `;
 
@@ -69,10 +61,10 @@ export let dom = {
 
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
-        dataHandler.getStatuses(function (statuses){
+        dataHandler.getStatuses(function (statuses) {
             dataHandler.getCardsByBoardId(boardId, function (cards) {
-            dom.showCards(cards, boardId, statuses);
-        });
+                dom.showCards(cards, boardId, statuses);
+            });
         })
 
 
@@ -82,13 +74,12 @@ export let dom = {
         // it adds necessary event listeners also
         let insert = '';
         // refine it to match design template
-        for (let i = 0; i<=statuses.length; i++)
-        {
+        for (let i = 0; i <= statuses.length; i++) {
             let tmp = []
-            for (let card of cards)
-            {
-                if (card['status_id'] === i){
-                    tmp.push({'id': card['id'],
+            for (let card of cards) {
+                if (card['status_id'] === i) {
+                    tmp.push({
+                        'id': card['id'],
                         'board_id': card['board_id'],
                         'status_id': card['status_id'],
                         'title': card['title'],
@@ -96,9 +87,8 @@ export let dom = {
                     })
                 }
             }
-            for (let t of tmp)
-            {
-                insert+=`<div class="card" draggable="true" id="cardId-${t.id}-${t.status_id}-${boardId}"> 
+            for (let t of tmp) {
+                insert += `<div class="card" draggable="true" id="cardId-${t.id}-${t.status_id}-${boardId}"> 
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title">${t.title}</div>
                 </div>`
@@ -166,32 +156,32 @@ export let dom = {
         });
 
     },
-    dragAndDrop: function (boardId){
+    dragAndDrop: function (boardId) {
         let draggables = document.querySelectorAll('.card')
         let containers = document.querySelectorAll('.board-column')
-        draggables.forEach(draggable =>{
-            draggable.addEventListener('dragstart', () =>draggable.classList.add('dragging'))
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'))
 
-            draggable.addEventListener('dragend', () =>{draggable.classList.remove('dragging')
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging')
 
-                    dataHandler.saveCards(draggable.id,function (){
+                dataHandler.saveCards(draggable.id, function () {
 
 
-                        dom.loadCards(boardId)
-                    })
+                    dom.loadCards(boardId)
+                })
             })
         })
-        containers.forEach(container =>{
-            container.addEventListener('dragover', e =>
-                {
+        containers.forEach(container => {
+            container.addEventListener('dragover', e => {
                     e.preventDefault()
                     let dragged = document.querySelector('.dragging')
                     //container.appendChild(dragged)
 
-                    let tmp = dragged.id.slice(0,9)
+                    let tmp = dragged.id.slice(0, 9)
                     let tmp2 = container.getAttribute('data-status')
                     console.log(tmp2)
-                    dragged.id = tmp+tmp2
+                    dragged.id = tmp + tmp2
 
 
                 }
@@ -274,8 +264,8 @@ export let dom = {
                 ${usrName}
             </div>`
     },
-    addLogoutListener: function() {
-    let logout = document.getElementById("logoutButton")
-    logout.addEventListener("click", (e) => usrLogout(e))
-}
+    addLogoutListener: function () {
+        let logout = document.getElementById("logoutButton")
+        logout.addEventListener("click", (e) => usrLogout(e))
+    }
 };
