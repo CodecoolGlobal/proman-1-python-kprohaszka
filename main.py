@@ -5,7 +5,8 @@ from psycopg2 import Error
 
 app = Flask(__name__)
 app.secret_key = b'super_secret_key'
-app.permanent_session_lifetime = False
+# app.permanent_session_lifetime = False
+
 
 
 @app.route("/")
@@ -75,6 +76,7 @@ def login():
     user_id = data_handler.get_user_id(usr_name)
     if util.verify_password(password, hashed_pass['password']):
         session['user'] = usr_name
+        session['user_id'] = user_id['id']
         return {"OK": True, "user_id": user_id['id'], "username": usr_name}
     else:
         return {"OK": "The username, or password does not match!"}
@@ -98,7 +100,7 @@ def register():
 def logout():
     # remove the username from the session if it's there
     session.pop('user', None)
-    return redirect(url_for('index'))
+    return {"OK": 'You are safely logged out.'}
 
 
 def main():
@@ -127,6 +129,14 @@ def save_status():
             n.append(i)
     print(n)
     data_handler.save_changed_card(n[0],n[1])
+
+@app.route("/get-session")
+def get_session():
+    print(session)
+    if 'user' in session:
+        return {'OK':True, 'user_id':session['user_id'], 'username':session['user']}
+    else:
+        return {'OK':False}
 
 if __name__ == '__main__':
     main()
