@@ -4,6 +4,13 @@ import {dataHandler} from "./data_handler.js";
 export let dom = {
     init: function () {
         // This function should run once, when the page is loaded.
+        // loads the boards to the screen
+        dom.loadBoards();
+        // adds boards to the table when clicked
+        dom.addBoardButtonToggle()
+        // adds registration button event
+        dom.sendRegistration()
+        dom.sendLogin()
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
