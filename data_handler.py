@@ -81,6 +81,7 @@ def add_new_card(cursor: RealDictCursor, board_id: int, title: str, status_id):
     args = {'board_id': board_id, 'title': title, 'status_id': status_id}
     cursor.execute(query, args)
 
+
 @database_common.connection_handler
 def save_changed_card(cursor: RealDictCursor, card_id:int, status_id:int):
     query = """
@@ -113,6 +114,28 @@ def get_private_boards(cursor: RealDictCursor, user_id) -> list:
     usr_id = {"user_id": user_id}
     cursor.execute(query, usr_id)
     return cursor.fetchall()
+
+@database_common.connection_handler
+def delete_card(cursor, card_id: int):
+    query = """
+    DELETE FROM cards
+    WHERE id = %(card_id)s"""
+    var = {'card_id': card_id}
+    cursor.execute(query, var)
+
+
+@database_common.connection_handler
+def delete_board(cursor, board_id: int):
+    query = """
+    DELETE FROM cards
+    WHERE board_id = %(board_id)s;
+    
+    DELETE FROM boards
+    WHERE id = %(board_id)s;
+    """
+    var = {'board_id': board_id}
+    cursor.execute(query, var)
+
 
 @database_common.connection_handler
 def delete_card(cursor, card_id: int):

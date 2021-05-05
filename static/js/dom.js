@@ -10,6 +10,7 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dataHandler.getStatuses(function (statuses) {
                 dom.showBoards(boards, statuses);
+                dom.deleteBoard();
             })
         });
 
@@ -101,7 +102,6 @@ export let dom = {
         }
         dom.dragAndDrop(boardId)
     },
-    // creates new card, saves it and calls the callback function with its data
     createNewCard: function (event) {
         const boardId = event.target.dataset.boardId
         let inputText = window.prompt("Enter a card title : ");
@@ -295,6 +295,7 @@ export let dom = {
         }
     }
     ,
+
 };
 
 
