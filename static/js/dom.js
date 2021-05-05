@@ -2,12 +2,22 @@
 import {dataHandler} from "./data_handler.js";
 
 export let dom = {
-    init: function () {
+    init: async function () {
         // This function should run once, when the page is loaded.
         // loads the boards to the screen
-        dom.loadBoards();
+        let session = await dataHandler.getSession()
+        console.log(session)
+        if (session.OK) {
+            dom.loadBoards();
+            dom.loadPrivateBoards(session.user_id);
+            dom.renderLoggedInNavbar(session.username);
+            dom.addLogoutListener();
+        } else {
+            dom.loadBoards();
+            dom.renderLoggedOutNavbar;
+        }
         // adds boards to the table when clicked
-        dom.addBoardButtonToggle()
+        dom.addBoardButtonToggle();
         // adds registration button event
         dom.sendRegistration()
         dom.sendLogin()
@@ -221,7 +231,7 @@ export let dom = {
             if (response.OK === true) {
                 dom.loadPrivateBoards(response.user_id)
                 dom.renderLoggedInNavbar(response.username)
-                dom.addLogoutListener()
+                // dom.addLogoutListener()
                 dom.addBoardButtonToggle()
             } else {
                 alert(response.OK)
@@ -286,6 +296,14 @@ export let dom = {
     },
     addLogoutListener: function() {
     let logout = document.getElementById("logoutButton")
-    logout.addEventListener("click", (e) => usrLogout(e))
-}
+    logout.addEventListener("click", (e) => dom.usrLogout(e))
+},
+    usrLogout: function(e) {
+        fetch('/logout')  // set the path; the method is GET by default, but can be modified with a second parameter
+            .then((response) => response.json())  // parse JSON format into JS object
+            .then((data) => {
+                alert(data.OK)
+                this.init()
+            })
+    }
 };
