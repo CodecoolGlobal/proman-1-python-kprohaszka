@@ -14,7 +14,7 @@ export let dom = {
             dom.addLogoutListener();
         } else {
             dom.loadBoards();
-            dom.renderLoggedOutNavbar;
+            dom.renderLoggedOutNavbar();
         }
         // adds boards to the table when clicked
         dom.addBoardButtonToggle();
@@ -299,11 +299,19 @@ export let dom = {
     logout.addEventListener("click", (e) => dom.usrLogout(e))
 },
     usrLogout: function(e) {
+        dom.divNullifier()
         fetch('/logout')  // set the path; the method is GET by default, but can be modified with a second parameter
             .then((response) => response.json())  // parse JSON format into JS object
             .then((data) => {
                 alert(data.OK)
                 this.init()
             })
+    },
+
+
+    divNullifier: function() {
+        let boards = document.getElementById('boards')
+        console.log(boards)
+        boards.innerHTML = ''
     }
 };
