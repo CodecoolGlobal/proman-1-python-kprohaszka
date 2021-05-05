@@ -70,12 +70,12 @@ def get_cards_for_board(board_id: int):
 @app.route('/login', methods=["GET", "POST"])
 def login():
     usr_name = request.json['username']
-    password = util.hash_password(request.json['password'])
+    password = request.json['password']
     hashed_pass = data_handler.get_usr_credentials(usr_name)
     user_id = data_handler.get_user_id(usr_name)
     if util.verify_password(password, hashed_pass['password']):
         session['user'] = usr_name
-        return {"OK": True, "user_id": user_id, "username": usr_name}
+        return {"OK": True, "user_id": user_id['id'], "username": usr_name}
     else:
         return {"OK": "The username, or password does not match!"}
 
