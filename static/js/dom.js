@@ -71,6 +71,7 @@ export let dom = {
         // retrieves cards and makes showCards called
         dataHandler.getCardsByBoardId(boardId, function (cards) {
             dom.showCards(cards, boardId);
+            dom.deleteCard();
         });
 
     },
@@ -110,8 +111,9 @@ export let dom = {
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="1"] .card-container`).innerHTML = inprogressCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="2"] .card-container`).innerHTML = testingCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="3"] .card-container`).innerHTML = doneCards
-        dom.dragAndDrop(boardId)
+        dom.dragAndDrop(boardId);
     },
+    // creates new card, saves it and calls the callback function with its data
     createNewCard: function (event) {
         const boardId = event.target.dataset.boardId
         let inputText = window.prompt("Enter a card title : ");
@@ -125,9 +127,7 @@ export let dom = {
         dataHandler.createNewCard(inputText, boardId, 0, function () {
             dom.loadCards(boardId)
         })
-        // creates new card, saves it and calls the callback function with its data
     },
-    // here comes more features
     // ADD Board
     addBoardButtonToggle: function () {
         let addBoardButton = document.getElementById('add-board');
@@ -168,10 +168,23 @@ export let dom = {
                     let tmp2 = container.getAttribute('data-status')
                     console.log(tmp2)
                     dragged.id = tmp + tmp2
-
-
                 }
             )
         })
+    },
+    deleteCard: function () {
+        let deleteButtons = document.querySelectorAll(".card-remove");
+        for (let deleteButton of deleteButtons) {
+            deleteButton.addEventListener('click', function () {
+                let fullId = deleteButton.parentNode.id;
+                let slicedId = fullId.slice(7);
+                let slicedBoard = slicedId.substring(slicedId.lastIndexOf('-'));
+                let boardId = slicedBoard.slice(1);
+                let cardId = slicedId.substring(0, slicedId.indexOf('-'));
+                dataHandler.deleteCardDataHandler(cardId, boardId, function () {
+                    dom.loadCards(boardId);
+                })
+            });
+        }
     },
 };

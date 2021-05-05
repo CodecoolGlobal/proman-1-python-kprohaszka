@@ -92,8 +92,10 @@ def save_changed_card(cursor: RealDictCursor, card_id:int, status_id:int):
 
 
 @database_common.connection_handler
-def delete_card(cursor, card_id):
+def delete_card(cursor, card_id: int):
     query = """
     DELETE FROM cards
-    WHERE id = %s"""
-    cursor.execute(query, (card_id, ))
+    WHERE id = %(card_id)s"""
+    print(query, card_id)
+    var = {'card_id': card_id}
+    cursor.execute(query, var)

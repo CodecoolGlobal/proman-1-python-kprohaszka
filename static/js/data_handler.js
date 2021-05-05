@@ -83,5 +83,11 @@ export let dataHandler = {
             callback(response)
         })
     },
+    deleteCardDataHandler: function (cardId, boardId, callback) {
+        let data = {"board_id": boardId};
+        dataHandler._api_post(`/delete-card/${cardId}`, data, (response) => {
+            callback(response);
+        })
+    },
     // here comes more features
 };

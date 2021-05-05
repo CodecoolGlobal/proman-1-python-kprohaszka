@@ -115,10 +115,9 @@ def save_status():
 
 @app.route("/delete-card/<int:card_id>", methods=['GET', 'POST'])
 @util.json_response
-def delete_card(card_id):
-    if request.method == 'POST':
-        data = request.json
-        data_handler.delete_card(data['card_id'])
+def delete_card(card_id: int):
+    data_handler.delete_card(card_id)
+
 
 
 if __name__ == '__main__':
