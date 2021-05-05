@@ -231,7 +231,7 @@ export let dom = {
             if (response.OK === true) {
                 dom.loadPrivateBoards(response.user_id)
                 dom.renderLoggedInNavbar(response.username)
-                // dom.addLogoutListener()
+                dom.addLogoutListener()
                 dom.addBoardButtonToggle()
             } else {
                 alert(response.OK)
