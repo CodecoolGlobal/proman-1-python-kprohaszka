@@ -69,47 +69,44 @@ export let dom = {
 
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
-        dataHandler.getCardsByBoardId(boardId, function (cards) {
-            dom.showCards(cards, boardId);
+        dataHandler.getStatuses(function (statuses){
+            dataHandler.getCardsByBoardId(boardId, function (cards) {
+            dom.showCards(cards, boardId, statuses);
         });
+        })
+
 
     },
-    showCards: function (cards, boardId) {
+    showCards: function (cards, boardId, statuses) {
         // shows the cards of a board
         // it adds necessary event listeners also
-        let newCards = '';
-        let inprogressCards = '';
-        let testingCards = '';
-        let doneCards = '';
+        let insert = '';
         // refine it to match design template
-        for (let card of cards) {
-            if (card.status_id === 0) {
-                newCards += `<div class="card" draggable="true" id="cardId-${card.id}-${card.status_id}-${boardId}"> 
-                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title">${card.title}</div>
-                </div>`
-
-            } else if (card.status_id === 1) {
-                inprogressCards += `<div class="card" draggable="true" id="cardId-${card.id}-${card.status_id}-${boardId}">
-                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title">${card.title}</div>
-                </div>`
-            } else if (card.status_id === 2) {
-                testingCards += `<div class="card" draggable="true" id="cardId-${card.id}-${card.status_id}-${boardId}">
-                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title">${card.title}</div>
-                </div>`
-            } else if (card.status_id === 3) {
-                doneCards += `<div class="card" draggable="true" id="cardId-${card.id}-${card.status_id}-${boardId}">
-                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>                    
-                    <div class="card-title">${card.title}</div>
-                </div>`
+        for (let i = 0; i<=statuses.length; i++)
+        {
+            let tmp = []
+            for (let card of cards)
+            {
+                if (card['status_id'] === i){
+                    tmp.push({'id': card['id'],
+                        'board_id': card['board_id'],
+                        'status_id': card['status_id'],
+                        'title': card['title'],
+                        'order': card['order']
+                    })
+                }
             }
+            for (let t of tmp)
+            {
+                insert+=`<div class="card" draggable="true" id="cardId-${t.id}-${t.status_id}-${boardId}"> 
+                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                    <div class="card-title">${t.title}</div>
+                </div>`
+                document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="${i}"] .card-container`).innerHTML = insert
+            }
+            tmp = []
+            insert = ''
         }
-        document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="0"] .card-container`).innerHTML = newCards
-        document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="1"] .card-container`).innerHTML = inprogressCards
-        document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="2"] .card-container`).innerHTML = testingCards
-        document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="3"] .card-container`).innerHTML = doneCards
         dom.dragAndDrop(boardId)
     },
     createNewCard: function (event) {
