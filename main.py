@@ -119,12 +119,11 @@ def delete_card(card_id: int):
     data_handler.delete_card(card_id)
 
 
-@app.route('/delete-board', methods=['GET', 'POST'])
+@app.route('/delete-board/<int:board_id>', methods=['GET', 'POST'])
 @util.json_response
-def delete_board():
+def delete_board(board_id: int):
     if request.method == 'POST':
-        data = request.json
-        data_handler.delete_board(data["board_id"])
+        data_handler.delete_board(board_id)
 
 
 if __name__ == '__main__':

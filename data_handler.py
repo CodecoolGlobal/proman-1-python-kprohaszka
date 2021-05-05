@@ -96,18 +96,18 @@ def delete_card(cursor, card_id: int):
     query = """
     DELETE FROM cards
     WHERE id = %(card_id)s"""
-    print(query, card_id)
     var = {'card_id': card_id}
     cursor.execute(query, var)
 
 
 @database_common.connection_handler
-def delete_board(cursor, board_id):
+def delete_board(cursor, board_id: int):
     query = """
     DELETE FROM cards
-    WHERE board_id = %s;
+    WHERE board_id = %(board_id)s;
     
     DELETE FROM boards
-    WHERE id = %s;
+    WHERE id = %(board_id)s;
     """
-    cursor.execute(query, board_id)
+    var = {'board_id': board_id}
+    cursor.execute(query, var)
