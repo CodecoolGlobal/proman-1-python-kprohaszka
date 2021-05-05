@@ -91,10 +91,14 @@ export let dataHandler = {
         });
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
-        let data = {"card_title": cardTitle, "board_id": boardId, "status_id": statusId};
-        dataHandler._api_post("/create-card", data, (response) => {
-            callback(response)
-        })
-    },
+            let data = {"card_title": cardTitle, "board_id": boardId, "status_id": statusId};
+            dataHandler._api_post("/create-card", data, (response) => {
+                callback(response)
+            })},
+    saveCards: function (cards, callback){
+        let data = {cards};
+            dataHandler._api_post("/save", data, (response) => {
+                callback(response)
+            })},
     // here comes more features
 };

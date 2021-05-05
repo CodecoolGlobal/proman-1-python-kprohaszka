@@ -116,5 +116,17 @@ def add_new_card():
     data_handler.add_new_card(data["board_id"], data["card_title"], data["status_id"])
 
 
+@app.route("/save", methods=["GET", "POST"])
+@util.json_response
+def save_status():
+    data = request.json
+    info=data.get('cards')
+    n=[]
+    for i in info:
+        if str(i).isdigit():
+            n.append(i)
+    print(n)
+    data_handler.save_changed_card(n[0],n[1])
+
 if __name__ == '__main__':
     main()

@@ -81,6 +81,16 @@ def add_new_card(cursor: RealDictCursor, board_id: int, title: str, status_id):
     args = {'board_id': board_id, 'title': title, 'status_id': status_id}
     cursor.execute(query, args)
 
+@database_common.connection_handler
+def save_changed_card(cursor: RealDictCursor, card_id:int, status_id:int):
+    query = """
+    UPDATE cards
+    SET status_id = %(status_id)s
+    WHERE %(card_id)s = id;
+    """
+    args = {'card_id': card_id, 'status_id': status_id}
+    cursor.execute(query, args)
+
 
 @database_common.connection_handler
 def get_user_id(cursor: RealDictCursor, usr_name):
