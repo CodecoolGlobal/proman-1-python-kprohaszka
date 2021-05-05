@@ -12,15 +12,15 @@ export let dom = {
             dom.loadPrivateBoards(session.user_id);
             dom.renderLoggedInNavbar(session.username);
             dom.addLogoutListener();
+            dom.addBoardButtonToggle();
+            dom.sendRegistration()
         } else {
             dom.loadBoards();
             dom.renderLoggedOutNavbar();
+            dom.addBoardButtonToggle();
+            dom.sendRegistration()
+            dom.sendLogin()
         }
-        // adds boards to the table when clicked
-        dom.addBoardButtonToggle();
-        // adds registration button event
-        dom.sendRegistration()
-        dom.sendLogin()
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
@@ -220,7 +220,7 @@ export let dom = {
     },
     sendLogin: function () {
         const loginForm = document.querySelector("#loginForm")
-        loginForm.addEventListener("submit", (e) => dom.loginHandler(e))
+        loginForm.addEventListener("submit", dom.loginHandler)
     },
     loginHandler: function (e) {
         e.preventDefault();
@@ -230,6 +230,8 @@ export let dom = {
         dataHandler.loginUser(username, password, (response) => {
             if (response.OK === true) {
                 dom.loadPrivateBoards(response.user_id)
+                const loginForm = document.querySelector("#loginForm")
+                loginForm.removeEventListener("submit", dom.loginHandler)
                 dom.renderLoggedInNavbar(response.username)
                 dom.addLogoutListener()
                 dom.addBoardButtonToggle()
@@ -240,7 +242,6 @@ export let dom = {
     },
     renderLoggedOutNavbar: function () {
         let nbar = document.getElementById("navBar")
-
         nbar.innerHTML = `<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             <button type="button" id="add-board" class="btn btn-dark">+ Create new board +</button>
 
@@ -263,7 +264,7 @@ export let dom = {
             </div>
         </div>
         <div class="shadow p-2 mb-3 bg-light rounded">
-            PUBLIC
+            Public
         </div>`
     },
 
@@ -307,8 +308,6 @@ export let dom = {
                 this.init()
             })
     },
-
-
     divNullifier: function() {
         let boards = document.getElementById('boards')
         console.log(boards)
