@@ -89,7 +89,7 @@ export let dataHandler = {
         dataHandler._api_post('/save_card_position', data)
     },
 
-    renameCards: function (id, title) {
+    renameCards: function (id, title, callback) {
         let data = {"id":id, "title":title};
         dataHandler._api_post("/rename_card", data,  (respone) => {callback(respone)})
     },
