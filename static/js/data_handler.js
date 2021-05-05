@@ -90,10 +90,11 @@ export let dataHandler = {
     },
 
     renameCards: function (id, title, callback) {
-        let data = {"id":id, "title":title};
-        dataHandler._api_post("/rename_card", data,  (respone) => {callback(respone)})
+        let data = {"id": id, "title": title};
+        dataHandler._api_post("/rename-card", data, (respone) => {
+            callback(respone)
+        })
     },
-
 
 
 };

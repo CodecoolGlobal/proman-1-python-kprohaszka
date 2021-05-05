@@ -108,10 +108,17 @@ export let dom = {
             }
         }
 
+
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="0"] .card-container`).innerHTML = newCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="1"] .card-container`).innerHTML = inprogressCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="2"] .card-container`).innerHTML = testingCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="3"] .card-container`).innerHTML = doneCards
+        let cardTitles = document.querySelectorAll('.card-title');
+        for (let cardTitle of cardTitles) {
+            cardTitle.addEventListener("click", () => dom.renameCards(cardTitle,event)
+            )
+        }
+        ;
     },
 
     createNewCard: function (event) {
@@ -127,8 +134,6 @@ export let dom = {
                         <input name="submit" id="submit" type="button" value="Save Text" />
                     </div>
                 </div>`;
-        document.getElementById("submit").addEventListener("click", dom.doEdit)
-        document.getElementById("thetext").addEventListener("click", dom.toggleEditor)
         dataHandler.createNewCard(inputText, boardId, 0, function () {
             console.log("valami")
         })
@@ -154,34 +159,46 @@ export let dom = {
     },
 
 
-    toggleEditor: function (event) {
-        let theText = document.getElementById('thetext');
-        let theEditor = document.getElementById('ta1');
-        let editorArea = document.getElementById('editor');
-        let subject = theText.innerHTML;
-        subject = subject.replace(new RegExp("<br />", "gi"), 'n');
-        subject = subject.replace(new RegExp("<br />", "gi"), 'n');
-        subject = subject.replace(new RegExp("<", "gi"), '<');
-        subject = subject.replace(new RegExp(">", "gi"), '>');
-        theEditor.value = subject;
-        theText.style.display = 'none';
-        editorArea.style.display = 'inline';
+    renameCards: function (cardTitle, event) {
+        let cardId = event.target.dataset.cardId
+        let oldCardTitle = cardTitle.innerHTML
+        let newCardTitle = prompt("Edit column name:", `${oldCardTitle}`)
+        dataHandler.renameCards(cardId, newCardTitle, function (){
+            console.log(newCardTitle)
+        let boardsContainerKill = document.getElementById("boards");
+        boardsContainerKill.innerHTML = ``;
+        dom.loadBoards()
+        })
     },
 
-
-    doEdit: function (event) {
-        let id = event.target.dataset.cardId
-        let title = document.getElementById('thetext');
-        let theEditor = document.getElementById('ta1');
-        console.log(id)
-        let editorArea = document.getElementById('editor');
-        let subject = theEditor.value;
-        subject = subject.replace(new RegExp("<", "g"), '<');
-        subject = subject.replace(new RegExp(">", "g"), '>');
-        subject = subject.replace(new RegExp("n", "g"), '<br />');
-        title.innerHTML = subject;
-        title.style.display = 'inline';
-        editorArea.style.display = 'none';
-        dataHandler.renameCards(id,title)
-    }
+    // toggleEditor: function (event) {
+    //     let theText = document.getElementById('thetext');
+    //     let theEditor = document.getElementById('ta1');
+    //     let editorArea = document.getElementById('editor');
+    //     let subject = theText.innerHTML;
+    //     subject = subject.replace(new RegExp("<br />", "gi"), 'n');
+    //     subject = subject.replace(new RegExp("<br />", "gi"), 'n');
+    //     subject = subject.replace(new RegExp("<", "gi"), '<');
+    //     subject = subject.replace(new RegExp(">", "gi"), '>');
+    //     theEditor.value = subject;
+    //     theText.style.display = 'none';
+    //     editorArea.style.display = 'inline';
+    // },
+    //
+    //
+    // doEdit: function (event) {
+    //     let id = event.target.dataset.cardId
+    //     let title = document.getElementById('thetext');
+    //     let theEditor = document.getElementById('ta1');
+    //     console.log(id)
+    //     let editorArea = document.getElementById('editor');
+    //     let subject = theEditor.value;
+    //     subject = subject.replace(new RegExp("<", "g"), '<');
+    //     subject = subject.replace(new RegExp(">", "g"), '>');
+    //     subject = subject.replace(new RegExp("n", "g"), '<br />');
+    //     title.innerHTML = subject;
+    //     title.style.display = 'inline';
+    //     editorArea.style.display = 'none';
+    //     dataHandler.renameCards(id, title)
+    // }
 };

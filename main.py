@@ -101,9 +101,12 @@ def add_new_card():
 
 
 @app.route("/rename-card", methods=["POST"])
+@util.json_response
 def rename_card_save():
-    cards = data_handler.get_cards()
     data = request.json
+    id = data['id']
+    title = data['title']
+    data_handler.update_card_title(id,title)
 
 
 

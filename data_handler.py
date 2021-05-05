@@ -81,9 +81,9 @@ def add_new_card(cursor: RealDictCursor, board_id: int, title: str, status_id):
 
 
 @database_common.connection_handler
-def card_title(cursor: RealDictCursor ,id, title):
+def update_card_title(cursor: RealDictCursor ,id, title):
     query = """
-        UPDATE statuses SET title = %(title)s WHERE id = %(id)s;
+        UPDATE cards SET title = %(title)s WHERE id = %(id)s;
     """
     values = {'id': id,'title':title}
     cursor.execute(query, values)
