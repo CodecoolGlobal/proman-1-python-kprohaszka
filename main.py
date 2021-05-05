@@ -104,13 +104,27 @@ def add_new_card():
 @util.json_response
 def save_status():
     data = request.json
-    info=data.get('cards')
-    n=[]
+    info = data.get('cards')
+    n = []
     for i in info:
         if str(i).isdigit():
             n.append(i)
     print(n)
-    data_handler.save_changed_card(n[0],n[1])
+    data_handler.save_changed_card(n[0], n[1])
+
+
+@app.route("/delete-card/<int:card_id>", methods=['GET', 'POST'])
+@util.json_response
+def delete_card(card_id: int):
+    data_handler.delete_card(card_id)
+
+
+@app.route('/delete-board/<int:board_id>', methods=['GET', 'POST'])
+@util.json_response
+def delete_board(board_id: int):
+    if request.method == 'POST':
+        data_handler.delete_board(board_id)
+
 
 if __name__ == '__main__':
     main()

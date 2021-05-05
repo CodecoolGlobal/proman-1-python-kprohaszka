@@ -10,6 +10,7 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dataHandler.getStatuses(function (statuses) {
                 dom.showBoards(boards, statuses);
+                dom.deleteBoard();
             })
         });
 
@@ -25,6 +26,7 @@ export let dom = {
                 <section class="board" id="${board.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
                 <button class="card-add-btn" data-board-id="${board.id}" id="add-new-card">Create new card</button>
+                <button class="board-delete" id="${board.id}" type="button"><i class="fas fa-times"></i></button>
                 <button data-board-id="${board.id}" id="button_board${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns collapse" id="board${board.id}">
@@ -71,6 +73,7 @@ export let dom = {
         // retrieves cards and makes showCards called
         dataHandler.getCardsByBoardId(boardId, function (cards) {
             dom.showCards(cards, boardId);
+            dom.deleteCard();
         });
 
     },
@@ -110,8 +113,9 @@ export let dom = {
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="1"] .card-container`).innerHTML = inprogressCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="2"] .card-container`).innerHTML = testingCards
         document.getElementById(boardId).querySelector(`.board-columns .board-column[data-status="3"] .card-container`).innerHTML = doneCards
-        dom.dragAndDrop(boardId)
+        dom.dragAndDrop(boardId);
     },
+    // creates new card, saves it and calls the callback function with its data
     createNewCard: function (event) {
         const boardId = event.target.dataset.boardId
         let inputText = window.prompt("Enter a card title : ");
@@ -125,9 +129,7 @@ export let dom = {
         dataHandler.createNewCard(inputText, boardId, 0, function () {
             dom.loadCards(boardId)
         })
-        // creates new card, saves it and calls the callback function with its data
     },
-    // here comes more features
     // ADD Board
     addBoardButtonToggle: function () {
         let addBoardButton = document.getElementById('add-board');
@@ -142,36 +144,63 @@ export let dom = {
         boardsContainerKill.innerHTML = ``;
         dom.loadBoards();
     },
-    dragAndDrop: function (boardId){
+    dragAndDrop: function (boardId) {
         let draggables = document.querySelectorAll('.card')
         let containers = document.querySelectorAll('.board-column')
-        draggables.forEach(draggable =>{
-            draggable.addEventListener('dragstart', () =>draggable.classList.add('dragging'))
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'))
 
-            draggable.addEventListener('dragend', () =>{draggable.classList.remove('dragging')
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging')
 
-                    dataHandler.saveCards(draggable.id,function (){
+                dataHandler.saveCards(draggable.id, function () {
 
 
-                        dom.loadCards(boardId)
-                    })
+                    dom.loadCards(boardId)
+                })
             })
         })
-        containers.forEach(container =>{
-            container.addEventListener('dragover', e =>
-                {
+        containers.forEach(container => {
+            container.addEventListener('dragover', e => {
                     e.preventDefault()
                     let dragged = document.querySelector('.dragging')
                     //container.appendChild(dragged)
 
-                    let tmp = dragged.id.slice(0,9)
+                    let tmp = dragged.id.slice(0, 9)
                     let tmp2 = container.getAttribute('data-status')
                     console.log(tmp2)
-                    dragged.id = tmp+tmp2
-
-
+                    dragged.id = tmp + tmp2
                 }
             )
         })
-    }
+    },
+    deleteCard: function () {
+        let deleteButtons = document.querySelectorAll(".card-remove");
+        for (let deleteButton of deleteButtons) {
+            deleteButton.addEventListener('click', function () {
+                let fullId = deleteButton.parentNode.id;
+                let slicedId = fullId.slice(7);
+                let slicedBoard = slicedId.substring(slicedId.lastIndexOf('-'));
+                let boardId = slicedBoard.slice(1);
+                let cardId = slicedId.substring(0, slicedId.indexOf('-'));
+                dataHandler.deleteCardDataHandler(cardId, boardId, function () {
+                    dom.loadCards(boardId);
+                })
+            });
+        }
+    },
+    deleteBoard: function () {
+        let delBoards = document.querySelectorAll(".board-delete")
+        for (let delBoard of delBoards) {
+            delBoard.addEventListener('click', function () {
+                let boardId = delBoard.id
+                console.log(boardId);
+                dataHandler.deleteBoard(boardId, function () {
+                    let boardsContainerKill = document.getElementById("boards");
+                    boardsContainerKill.innerHTML = ``;
+                    dom.loadBoards();
+                })
+            })
+        }
+        },
 };
