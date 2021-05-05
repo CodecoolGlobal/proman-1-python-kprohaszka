@@ -10,6 +10,7 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dataHandler.getStatuses(function (statuses) {
                 dom.showBoards(boards, statuses);
+                dom.deleteBoard();
             })
         });
 
@@ -25,6 +26,7 @@ export let dom = {
                 <section class="board" id="${board.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
                 <button class="card-add-btn" data-board-id="${board.id}" id="add-new-card">Create new card</button>
+                <button class="board-delete" id="${board.id}" type="button"><i class="fas fa-times"></i></button>
                 <button data-board-id="${board.id}" id="button_board${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns collapse" id="board${board.id}">
@@ -187,4 +189,18 @@ export let dom = {
             });
         }
     },
+    deleteBoard: function () {
+        let delBoards = document.querySelectorAll(".board-delete")
+        for (let delBoard of delBoards) {
+            delBoard.addEventListener('click', function () {
+                let boardId = delBoard.id
+                console.log(boardId);
+                dataHandler.deleteBoard(boardId, function () {
+                    let boardsContainerKill = document.getElementById("boards");
+                    boardsContainerKill.innerHTML = ``;
+                    dom.loadBoards();
+                })
+            })
+        }
+        },
 };

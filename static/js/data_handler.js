@@ -89,5 +89,11 @@ export let dataHandler = {
             callback(response);
         })
     },
+    deleteBoard: function (boardID, callback) {
+        let boardToDelete = {"board_id": boardID};
+        this._api_post(`/delete-board/${boardID}`, boardToDelete, (response) => {
+            callback(response)
+        });
+    },
     // here comes more features
 };
