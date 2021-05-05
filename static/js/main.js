@@ -4,13 +4,6 @@ import { dom } from "./dom.js";
 function init() {
     // init data
     dom.init();
-    // loads the boards to the screen
-    dom.loadBoards();
-    // adds boards to the table when clicked
-    dom.addBoardButtonToggle()
-    // adds registration button event
-    dom.sendRegistration()
-    dom.sendLogin()
 }
 
 window.onload = init
