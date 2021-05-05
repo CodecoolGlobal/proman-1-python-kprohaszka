@@ -2,8 +2,25 @@
 import {dataHandler} from "./data_handler.js";
 
 export let dom = {
-    init: function () {
+    init: async function () {
         // This function should run once, when the page is loaded.
+        // loads the boards to the screen
+        let session = await dataHandler.getSession()
+        console.log(session)
+        if (session.OK) {
+            dom.loadBoards();
+            dom.loadPrivateBoards(session.user_id);
+            dom.renderLoggedInNavbar(session.username);
+            dom.addLogoutListener();
+            dom.addBoardButtonToggle();
+            dom.sendRegistration()
+        } else {
+            dom.loadBoards();
+            dom.renderLoggedOutNavbar();
+            dom.addBoardButtonToggle();
+            dom.sendRegistration()
+            dom.sendLogin()
+        }
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
@@ -186,7 +203,7 @@ export let dom = {
     },
     sendLogin: function () {
         const loginForm = document.querySelector("#loginForm")
-        loginForm.addEventListener("submit", (e) => dom.loginHandler(e))
+        loginForm.addEventListener("submit", dom.loginHandler)
     },
     loginHandler: function (e) {
         e.preventDefault();
@@ -196,6 +213,8 @@ export let dom = {
         dataHandler.loginUser(username, password, (response) => {
             if (response.OK === true) {
                 dom.loadPrivateBoards(response.user_id)
+                const loginForm = document.querySelector("#loginForm")
+                loginForm.removeEventListener("submit", dom.loginHandler)
                 dom.renderLoggedInNavbar(response.username)
                 dom.addLogoutListener()
                 dom.addBoardButtonToggle()
@@ -206,7 +225,6 @@ export let dom = {
     },
     renderLoggedOutNavbar: function () {
         let nbar = document.getElementById("navBar")
-
         nbar.innerHTML = `<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             <button type="button" id="add-board" class="btn btn-dark">+ Create new board +</button>
 
@@ -229,7 +247,7 @@ export let dom = {
             </div>
         </div>
         <div class="shadow p-2 mb-3 bg-light rounded">
-            PUBLIC
+            Public
         </div>`
     },
 
@@ -260,9 +278,23 @@ export let dom = {
                 ${usrName}
             </div>`
     },
-    addLogoutListener: function () {
-        let logout = document.getElementById("logoutButton")
-        logout.addEventListener("click", (e) => usrLogout(e))
+    addLogoutListener: function() {
+    let logout = document.getElementById("logoutButton")
+    logout.addEventListener("click", (e) => dom.usrLogout(e))
+},
+    usrLogout: function(e) {
+        dom.divNullifier()
+        fetch('/logout')  // set the path; the method is GET by default, but can be modified with a second parameter
+            .then((response) => response.json())  // parse JSON format into JS object
+            .then((data) => {
+                alert(data.OK)
+                this.init()
+            })
+    },
+    divNullifier: function() {
+        let boards = document.getElementById('boards')
+        console.log(boards)
+        boards.innerHTML = ''
     },
     deleteCard: function () {
         let deleteButtons = document.querySelectorAll(".card-remove");
