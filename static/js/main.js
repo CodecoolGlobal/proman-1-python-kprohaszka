@@ -10,6 +10,7 @@ function init() {
     dom.addBoardButtonToggle()
     // adds registration button event
     dom.sendRegistration()
+    dom.sendLogin()
 }
 
 window.onload = init
