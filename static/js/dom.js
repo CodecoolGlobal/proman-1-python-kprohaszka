@@ -25,6 +25,7 @@ export let dom = {
                 <section class="board" id="${board.id}">
             <div class="board-header"><span class="board-title">${board.title}</span>
                 <button class="card-add-btn" data-board-id="${board.id}" id="add-new-card">Create new card</button>
+                <button class="board-delete" id="${board.id}" type="button"><i class="fas fa-times"></i></button>
                 <button data-board-id="${board.id}" id="button_board${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns collapse" id="board${board.id}">`
@@ -64,6 +65,7 @@ export let dom = {
         dataHandler.getStatuses(function (statuses) {
             dataHandler.getCardsByBoardId(boardId, function (cards) {
                 dom.showCards(cards, boardId, statuses);
+                dom.deleteCard();
             });
         })
 
@@ -99,6 +101,7 @@ export let dom = {
         }
         dom.dragAndDrop(boardId)
     },
+    // creates new card, saves it and calls the callback function with its data
     createNewCard: function (event) {
         const boardId = event.target.dataset.boardId
         let inputText = window.prompt("Enter a card title : ");
@@ -112,9 +115,7 @@ export let dom = {
         dataHandler.createNewCard(inputText, boardId, 0, function () {
             dom.loadCards(boardId)
         })
-        // creates new card, saves it and calls the callback function with its data
     },
-    // here comes more features
     // ADD Board
     addBoardButtonToggle: function () {
         let addBoardButton = document.getElementById('add-board');
@@ -262,5 +263,38 @@ export let dom = {
     addLogoutListener: function () {
         let logout = document.getElementById("logoutButton")
         logout.addEventListener("click", (e) => usrLogout(e))
+    },
+    deleteCard: function () {
+        let deleteButtons = document.querySelectorAll(".card-remove");
+        for (let deleteButton of deleteButtons) {
+            deleteButton.addEventListener('click', function () {
+                let fullId = deleteButton.parentNode.id;
+                let slicedId = fullId.slice(7);
+                let slicedBoard = slicedId.substring(slicedId.lastIndexOf('-'));
+                let boardId = slicedBoard.slice(1);
+                let cardId = slicedId.substring(0, slicedId.indexOf('-'));
+                dataHandler.deleteCardDataHandler(cardId, boardId, function () {
+                    dom.loadCards(boardId);
+                })
+            });
+        }
     }
+    ,
+    deleteBoard: function () {
+        let delBoards = document.querySelectorAll(".board-delete")
+        for (let delBoard of delBoards) {
+            delBoard.addEventListener('click', function () {
+                let boardId = delBoard.id
+                console.log(boardId);
+                dataHandler.deleteBoard(boardId, function () {
+                    let boardsContainerKill = document.getElementById("boards");
+                    boardsContainerKill.innerHTML = ``;
+                    dom.loadBoards();
+                })
+            })
+        }
+    }
+    ,
 };
+
+

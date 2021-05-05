@@ -91,14 +91,28 @@ export let dataHandler = {
         });
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
-            let data = {"card_title": cardTitle, "board_id": boardId, "status_id": statusId};
-            dataHandler._api_post("/create-card", data, (response) => {
-                callback(response)
-            })},
-    saveCards: function (cards, callback){
+        let data = {"card_title": cardTitle, "board_id": boardId, "status_id": statusId};
+        dataHandler._api_post("/create-card", data, (response) => {
+            callback(response)
+        })
+    },
+    saveCards: function (cards, callback) {
         let data = {cards};
-            dataHandler._api_post("/save", data, (response) => {
-                callback(response)
-            })},
+        dataHandler._api_post("/save", data, (response) => {
+            callback(response)
+        })
+    },
+    deleteCardDataHandler: function (cardId, boardId, callback) {
+        let data = {"board_id": boardId};
+        dataHandler._api_post(`/delete-card/${cardId}`, data, (response) => {
+            callback(response);
+        })
+    },
+    deleteBoard: function (boardID, callback) {
+        let boardToDelete = {"board_id": boardID};
+        this._api_post(`/delete-board/${boardID}`, boardToDelete, (response) => {
+            callback(response)
+        });
+    },
     // here comes more features
 };
