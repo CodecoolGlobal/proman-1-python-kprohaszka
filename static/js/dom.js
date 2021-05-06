@@ -110,7 +110,7 @@ export let dom = {
                     }
                 }
                 for (let t of tmp) {
-                    insert += `<div class="card draggable" draggable="true" id="cardId-${t.id}-${t.status_id}-${boardId}"> 
+                    insert += `<div class="card draggable" draggable="true" id="cardID-${t.id}-${t.status_id}-${boardId}"> 
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title" data-card-id="${t.id}" >${t.title}</div>
                 </div>`
@@ -360,7 +360,7 @@ export let dom = {
                     const draggable = document.querySelector('.dragging')
 
                     let infos = dom.getCardInfo(draggable.id)
-                    draggable.id = "cardID-" + infos[0] + "-" + container.id.slice(9, 10) + "-" + container.id.slice(7, 8)
+                    draggable.id =infos[0] + "-" + container.id.slice(9, 10) + "-" + container.id.slice(7, 8)
                     if (afterElement === null) {
                         container.appendChild(draggable)
                     } else {
@@ -372,7 +372,7 @@ export let dom = {
         },
         getCardInfo: function (card) {
 
-            let card_id = card.slice(7, 8)
+            let card_id = card.slice(0,8)
             let status_id = card.slice(9, 10)
             let board_id = card.slice(11, 12)
             return [card_id, status_id, board_id]

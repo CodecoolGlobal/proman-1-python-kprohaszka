@@ -127,12 +127,8 @@ def save_status():
     print(info)
 
     for j in info:
-        n = []
-        for i in j:
-            if str(i).isdigit():
-                n.append(i)
-        print(n[0],n[1])
-        data_handler.save_changed_card(n[0], n[1])
+        tmp = j.split('-')
+        data_handler.save_changed_card(tmp[1], tmp[2])
 
 
 @app.route("/delete-card/<int:card_id>", methods=['GET', 'POST'])
