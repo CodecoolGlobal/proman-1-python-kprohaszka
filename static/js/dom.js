@@ -342,13 +342,15 @@ export let dom = {
 
         renameCards: function (cardTitle, event) {
             let cardId = event.target.dataset.cardId
+            let fullId = cardTitle.parentNode.id;
+            let slicedId = fullId.slice(7);
+            let slicedBoard = slicedId.substring(slicedId.lastIndexOf('-'));
+            let boardId = slicedBoard.slice(1);
+            console.log(boardId)
             let oldCardTitle = cardTitle.innerHTML
             let newCardTitle = prompt("Edit card name:", `${oldCardTitle}`)
             dataHandler.renameCards(cardId, newCardTitle, function () {
-                console.log(newCardTitle)
-                let boardsContainerKill = document.getElementById("boards");
-                boardsContainerKill.innerHTML = ``;
-                dom.loadBoards()
+                dom.loadCards(boardId)
             })
         }
     }
