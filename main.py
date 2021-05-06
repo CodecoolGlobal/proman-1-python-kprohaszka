@@ -163,6 +163,15 @@ def rename_card_save():
     data_handler.update_card_title(id,title)
 
 
+@app.route("/rename-board", methods=["POST"])
+@util.json_response
+def rename_board():
+    print('BELEEEEEP')
+    data = request.json
+    print(f'REQUEST.JSON{data}')
+    id = data['id']
+    title = data['title']
+    data_handler.update_board_title(id,title)
 
 
 if __name__ == '__main__':
