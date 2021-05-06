@@ -372,7 +372,6 @@ export let dom = {
             subject = subject.replace(new RegExp(">", "g"), '>');
             subject = subject.replace(new RegExp("n", "g"), '<br />');
             theText.innerHTML = subject;
-            alert('Successful Renaming')
             theText.style.display = 'inline';
             editorArea.style.display = 'none';
             dataHandler.renameBoard(headerId, subject, function () {

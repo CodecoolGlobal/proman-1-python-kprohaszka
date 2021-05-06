@@ -151,3 +151,14 @@ def update_board_title(cursor: RealDictCursor, id, title):
     """
     values = {'id': id, 'title': title}
     cursor.execute(query, values)
+
+
+@database_common.connection_handler
+def check_user(cursor: RealDictCursor, username):
+    query = """
+        SELECT username FROM users
+        WHERE username = %(username)s;
+        """
+    var = {'username': username}
+    cursor.execute(query, var)
+    return cursor.fetchone()
