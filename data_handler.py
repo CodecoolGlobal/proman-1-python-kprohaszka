@@ -35,12 +35,21 @@ def get_cards_for_board(cursor: RealDictCursor) -> list:
 
 
 @database_common.connection_handler
-def create_new_board(cursor: RealDictCursor, title, user_id):
+def create_new_private_board(cursor: RealDictCursor, title, user_id):
     query = """
     INSERT INTO boards (title, user_id) 
     VALUES (%(title)s, %(user_id)s)
     """
     args = {'title': title, 'user_id': user_id}
+    cursor.execute(query, args)
+
+@database_common.connection_handler
+def create_new_public_board(cursor: RealDictCursor, title):
+    query = """
+    INSERT INTO boards (title) 
+    VALUES (%(title)s)
+    """
+    args = {'title': title}
     cursor.execute(query, args)
 
 

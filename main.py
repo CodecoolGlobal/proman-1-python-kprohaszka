@@ -46,9 +46,13 @@ def get_statuses():
 @app.route('/create-new-board', methods=['GET', 'POST'])
 @util.json_response
 def create_new_board():
-    user_id = request.json["user_id"]
-    title = request.json['title']
-    data_handler.create_new_board(title, user_id)
+    try:
+        user_id = request.json["user_id"]
+        title = request.json['title']
+        data_handler.create_new_private_board(title, user_id)
+    except KeyError:
+        title = request.json['title']
+        data_handler.create_new_public_board(title)
 
 
 @app.route("/get-cards/<int:board_id>")
