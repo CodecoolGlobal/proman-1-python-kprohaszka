@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, url_for, redirect, make_response, session, escape, current_app
 import util
 import data_handler
+from psycopg2 import Error
 
 app = Flask(__name__)
 app.secret_key = b'super_secret_key'
-app.permanent_session_lifetime = False
+# app.permanent_session_lifetime = False
+
 
 
 @app.route("/")
@@ -22,6 +24,15 @@ def get_boards():
     All the boards
     """
     return data_handler.get_boards()
+
+
+@app.route("/get-boards/<user_id>")
+@util.json_response
+def get_private_boards(user_id):
+    """
+    All the boards
+    """
+    return data_handler.get_private_boards(user_id)
 
 
 @app.route("/get-statuses")
@@ -59,30 +70,37 @@ def get_cards_for_board(board_id: int):
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        usr_name = request.form['usr_name']
-        password = request.form['password']
-        hashed_pass = data_handler.get_usr_credentials(usr_name)
-        if util.verify_password(password, hashed_pass['password']):
-            session['user'] = usr_name
-            return render_template('index.html')
+    usr_name = request.json['username']
+    password = request.json['password']
+    hashed_pass = data_handler.get_usr_credentials(usr_name)
+    user_id = data_handler.get_user_id(usr_name)
+    if util.verify_password(password, hashed_pass['password']):
+        session['user'] = usr_name
+        session['user_id'] = user_id['id']
+        return {"OK": True, "user_id": user_id['id'], "username": usr_name}
     else:
-        return render_template('index.html')
+        return {"OK": "The username, or password does not match!"}
 
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
-    usr_name = request.form['usr_name']
-    password = util.hash_password(request.form['password'])
-    data_handler.register_usr(usr_name, password)
-    return render_template('index.html')
+    usr_name = request.json['username']
+    password = util.hash_password(request.json['password'])
+    if usr_name and password:
+        try:
+            user = data_handler.register_usr(usr_name, password)
+            return {"OK": True, "username": user["username"]}
+        except Error:
+            return {"OK": "Username already exists"}
+    else:
+        return {"OK": "Please fill out both username, and password"}
 
 
 @app.route('/logout')
 def logout():
     # remove the username from the session if it's there
     session.pop('user', None)
-    return redirect(url_for('index'))
+    return {"OK": 'You are safely logged out.'}
 
 
 def main():
@@ -100,10 +118,46 @@ def add_new_card():
     data_handler.add_new_card(data["board_id"], data["card_title"], data["status_id"])
 
 
+@app.route("/save", methods=["GET", "POST"])
+@util.json_response
+def save_status():
+    data = request.json
+    info = data.get('cards')
+    n = []
+    for i in info:
+        if str(i).isdigit():
+            n.append(i)
+    print(n)
+    data_handler.save_changed_card(n[0], n[1])
+
+
+@app.route("/delete-card/<int:card_id>", methods=['GET', 'POST'])
+@util.json_response
+def delete_card(card_id: int):
+    data_handler.delete_card(card_id)
+
+
+@app.route('/delete-board/<int:board_id>', methods=['GET', 'POST'])
+@util.json_response
+def delete_board(board_id: int):
+    if request.method == 'POST':
+        data_handler.delete_board(board_id)
+
+
+@app.route("/get-session")
+def get_session():
+    print(session)
+    if 'user' in session:
+        return {'OK':True, 'user_id':session['user_id'], 'username':session['user']}
+    else:
+        return {'OK':False}
+
+
 @app.route("/rename-card", methods=["POST"])
 @util.json_response
 def rename_card_save():
     data = request.json
+    print(data)
     id = data['id']
     title = data['title']
     data_handler.update_card_title(id,title)

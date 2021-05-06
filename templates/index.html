@@ -6,8 +6,38 @@
 {% block content %}
     <!-- Emmet: .board-container>section.board*3>.board-header>(span.board-title{Board $}+button.board-add{Add Card}+button.board-toggle>i.fas.fa-chevron-down)^.board-columns>((.board-column>.board-column-title{New}+.board-column-content>.card*5>(.card-remove>i.fas.fa-trash-alt^.card-title{Card $}))+(.board-column>.board-column-title{In Progress}+.board-column-content>.card*5>(.card-remove>i.fas.fa-trash-alt^.card-title{Card $}))+(.board-column>.board-column-title{Testing}+.board-column-content>.card*5>(.card-remove>i.fas.fa-trash-alt^.card-title{Card $}))+(.board-column>.board-column-title{Done}+.board-column-content>.card*5>(.card-remove>i.fas.fa-trash-alt^.card-title{Card $}))) -->
 {#    add boards #}
-    <button type="button" id="add-board" class="btn btn-dark">+ Create new board +</button>
+    <div class="container">
+    <nav id="navBar" class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <button type="button" id="add-board" class="btn btn-dark">+ Create new board +</button>
 
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button"
+                        class="btn btn-secondary dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    login/register
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <button id="loginButton" type="button" class="dropdown-item" data-toggle="modal"
+                            data-target="#login">
+                        login
+                    </button>
+                    <button type="button" class="dropdown-item" data-toggle="modal"
+                            data-target="#register">
+                        register
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="shadow p-2 mb-3 bg-light rounded">
+            {% if session['user'] %}
+                Logged in as {{ session['user'] }}
+            {% else %}
+                Public
+            {% endif %}
+        </div>
+        </nav>
+    </div>
 {#    boards#}
     <div id="boards"></div>
 {% endblock %}
