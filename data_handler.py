@@ -104,6 +104,7 @@ def get_user_id(cursor: RealDictCursor, usr_name):
     cursor.execute(query, var)
     return cursor.fetchone()
 
+
 @database_common.connection_handler
 def get_private_boards(cursor: RealDictCursor, user_id) -> list:
     query = """
@@ -157,3 +158,12 @@ def delete_board(cursor, board_id: int):
     """
     var = {'board_id': board_id}
     cursor.execute(query, var)
+
+
+@database_common.connection_handler
+def update_card_title(cursor: RealDictCursor ,id, title):
+    query = """
+        UPDATE cards SET title = %(title)s WHERE id = %(id)s;
+    """
+    values = {'id': id,'title':title}
+    cursor.execute(query, values)

@@ -152,5 +152,18 @@ def get_session():
     else:
         return {'OK':False}
 
+
+@app.route("/rename-card", methods=["POST"])
+@util.json_response
+def rename_card_save():
+    data = request.json
+    print(data)
+    id = data['id']
+    title = data['title']
+    data_handler.update_card_title(id,title)
+
+
+
+
 if __name__ == '__main__':
     main()
