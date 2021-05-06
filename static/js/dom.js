@@ -44,6 +44,7 @@ export let dom = {
             <div class="board-header"><span class="board-title">${board.title}</span>
                 <button class="card-add-btn" data-board-id="${board.id}" id="add-new-card">Create new card</button>
                 <button class="board-delete" id="${board.id}" type="button"><i class="fas fa-times"></i></button>
+                <button class="board-save hidden" id="save${board.id}" type="button">Save</button>
                 <button data-board-id="${board.id}" id="button_board${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns collapse" id="board${board.id}">`
@@ -84,7 +85,7 @@ export let dom = {
                 dataHandler.getCardsByBoardId(boardId, function (cards) {
                     dom.showCards(cards, boardId, statuses);
                     dom.deleteCard();
-                    dom.dragAndDrop();
+                    dom.dragAndDrop(boardId);
                 });
             })
 
@@ -324,14 +325,28 @@ export let dom = {
                 dom.loadBoards()
             })
         },
-        dragAndDrop: function () {
+        dragAndDrop: function (boardId) {
             let draggables = document.querySelectorAll('.draggable')
             let containers = document.querySelectorAll('.card-container')
-            let categoryContainers = document.querySelectorAll('.board-column')
+            let deletebutton = document.getElementById('save' + boardId)
+            let dataCache = []
             draggables.forEach(draggable => {
                 draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'))
 
                 draggable.addEventListener('dragend', () => {
+
+                    dataCache.push(draggable.id)
+                    console.log(draggable.id)
+                    if (deletebutton.classList.contains('hidden')) {
+                        deletebutton.classList.remove('hidden')
+                        deletebutton.addEventListener('click', () => {
+                            dataHandler.saveCards(dataCache, () => {
+                                    deletebutton.removeEventListener('click', () => {})
+                                }
+                            )
+                            deletebutton.classList.add('hidden')
+                        })
+                    }
                     draggable.classList.remove('dragging')
 
                 })
@@ -340,19 +355,27 @@ export let dom = {
                 container.addEventListener('dragover', e => {
                     e.preventDefault()
                     const afterElement = dom.getDragAfterElement(container, e.clientY)
-                    console.log(afterElement)
                     const draggable = document.querySelector('.dragging')
-                    if(afterElement === null){
+
+                    let infos = dom.getCardInfo(draggable.id)
+                    draggable.id = "cardID-" + infos[0] + "-" + container.id.slice(9, 10) + "-" + container.id.slice(7, 8)
+                    if (afterElement === null) {
                         container.appendChild(draggable)
-                    }
-                    else{
-                        container.insertBefore(draggable,afterElement)
+                    } else {
+                        container.insertBefore(draggable, afterElement)
                     }
 
                 })
             })
         },
-        getDragAfterElement: function (container, y) {
+        getCardInfo: function (card) {
+
+            let card_id = card.slice(7, 8)
+            let status_id = card.slice(9, 10)
+            let board_id = card.slice(11, 12)
+            return [card_id, status_id, board_id]
+        },
+        getDragAfterElement: function (container, y) { //seems magical to me
             const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')]
             return draggableElements.reduce((closest, child) => {
                 const box = child.getBoundingClientRect()

@@ -98,7 +98,7 @@ export let dataHandler = {
         },
 
 
-        function(cards, callback) {
+        saveCards:function(cards, callback) {
             let data = {cards};
             dataHandler._api_post("/save", data, (response) => {
                 callback(response)

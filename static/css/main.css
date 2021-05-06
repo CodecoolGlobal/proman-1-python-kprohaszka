@@ -145,3 +145,11 @@ div#editor {
     margin-top: 1rem;
 }
 
+.board-save{
+
+    margin-top: 0.77rem;
+    float: right;
+}
+.hidden {
+    display: none;
+}

@@ -5,8 +5,9 @@ from psycopg2 import Error
 
 app = Flask(__name__)
 app.secret_key = b'super_secret_key'
-# app.permanent_session_lifetime = False
 
+
+# app.permanent_session_lifetime = False
 
 
 @app.route("/")
@@ -123,12 +124,13 @@ def add_new_card():
 def save_status():
     data = request.json
     info = data.get('cards')
+    print(info)
     n = []
-    for i in info:
-        if str(i).isdigit():
-            n.append(i)
-    print(n)
-    data_handler.save_changed_card(n[0], n[1])
+    for j in info:
+        for i in j:
+            if str(i).isdigit():
+                n.append(i)
+        data_handler.save_changed_card(n[0], n[1])
 
 
 @app.route("/delete-card/<int:card_id>", methods=['GET', 'POST'])
@@ -148,9 +150,9 @@ def delete_board(board_id: int):
 def get_session():
     print(session)
     if 'user' in session:
-        return {'OK':True, 'user_id':session['user_id'], 'username':session['user']}
+        return {'OK': True, 'user_id': session['user_id'], 'username': session['user']}
     else:
-        return {'OK':False}
+        return {'OK': False}
 
 
 @app.route("/rename-card", methods=["POST"])
@@ -160,9 +162,7 @@ def rename_card_save():
     print(data)
     id = data['id']
     title = data['title']
-    data_handler.update_card_title(id,title)
-
-
+    data_handler.update_card_title(id, title)
 
 
 if __name__ == '__main__':
