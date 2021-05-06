@@ -127,9 +127,15 @@ export let dataHandler = {
 
         renameCards: function (id, title, callback) {
             let data = {"id": id, "title": title};
-            dataHandler._api_post("/rename-card", data, (respone) => {
-                callback(respone)
+            dataHandler._api_post("/rename-card", data, (response) => {
+                callback(response)
             })
         },
+        renameBoard: function (id, title, callback) {
+            let data = {"id": id, "title": title};
+            dataHandler._api_post("/rename-board", data, (response) => {
+                callback(response)
+            })
+        }
     }
 ;
