@@ -334,9 +334,11 @@ export let dom = {
                 draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'))
 
                 draggable.addEventListener('dragend', () => {
-
-                    dataCache.push(draggable.id)
-                    console.log(draggable.id)
+                    dataCache = []
+                    for (let data of draggables){
+                        dataCache.push(data.id)
+                    }
+                    console.log(dataCache)
                     if (deletebutton.classList.contains('hidden')) {
                         deletebutton.classList.remove('hidden')
                         deletebutton.addEventListener('click', () => {

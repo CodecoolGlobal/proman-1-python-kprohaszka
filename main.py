@@ -125,11 +125,13 @@ def save_status():
     data = request.json
     info = data.get('cards')
     print(info)
-    n = []
+
     for j in info:
+        n = []
         for i in j:
             if str(i).isdigit():
                 n.append(i)
+        print(n[0],n[1])
         data_handler.save_changed_card(n[0], n[1])
 
 
