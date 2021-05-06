@@ -167,3 +167,13 @@ def update_card_title(cursor: RealDictCursor ,id, title):
     """
     values = {'id': id,'title':title}
     cursor.execute(query, values)
+
+
+@database_common.connection_handler
+def update_board_title(cursor: RealDictCursor ,id, title):
+    print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTt')
+    query = """
+        UPDATE boards SET title = %(title)s WHERE id = %(id)s;
+    """
+    values = {'id': id,'title':title}
+    cursor.execute(query, values)
