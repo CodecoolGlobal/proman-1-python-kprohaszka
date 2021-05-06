@@ -84,6 +84,7 @@ export let dom = {
                 dataHandler.getCardsByBoardId(boardId, function (cards) {
                     dom.showCards(cards, boardId, statuses);
                     dom.deleteCard();
+                    dom.dragAndDrop();
                 });
             })
 
@@ -108,7 +109,7 @@ export let dom = {
                     }
                 }
                 for (let t of tmp) {
-                    insert += `<div class="card" draggable="true" id="cardId-${t.id}-${t.status_id}-${boardId}"> 
+                    insert += `<div class="card draggable" draggable="true" id="cardId-${t.id}-${t.status_id}-${boardId}"> 
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title" data-card-id="${t.id}" >${t.title}</div>
                 </div>`
@@ -123,7 +124,6 @@ export let dom = {
                 cardTitle.addEventListener("click", () => dom.renameCards(cardTitle, event))
             }
             ;
-            dom.dragAndDrop(boardId)
         },
 
         createNewCard: function (event) {
@@ -184,33 +184,6 @@ export let dom = {
                 })
             });
 
-        },
-        dragAndDrop: function (boardId) {
-            let draggables = document.querySelectorAll('.card')
-            let containers = document.querySelectorAll('.board-column')
-            draggables.forEach(draggable => {
-                draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'))
-
-                draggable.addEventListener('dragend', () => {
-                    draggable.classList.remove('dragging')
-
-                })
-            })
-            containers.forEach(container => {
-                container.addEventListener('dragover', e => {
-                        e.preventDefault()
-                        let dragged = document.querySelector('.dragging')
-                        container.appendChild(dragged)
-
-                        let tmp = dragged.id.slice(0, 9)
-                        let tmp2 = container.getAttribute('data-status')
-                        console.log(tmp2)
-                        dragged.id = tmp + tmp2
-
-
-                    }
-                )
-            })
         },
         sendLogin: function () {
             const loginForm = document.querySelector("#loginForm")
@@ -350,7 +323,47 @@ export let dom = {
                 boardsContainerKill.innerHTML = ``;
                 dom.loadBoards()
             })
-        }
+        },
+        dragAndDrop: function () {
+            let draggables = document.querySelectorAll('.draggable')
+            let containers = document.querySelectorAll('.card-container')
+            let categoryContainers = document.querySelectorAll('.board-column')
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'))
+
+                draggable.addEventListener('dragend', () => {
+                    draggable.classList.remove('dragging')
+
+                })
+            })
+            containers.forEach(container => {
+                container.addEventListener('dragover', e => {
+                    e.preventDefault()
+                    const afterElement = dom.getDragAfterElement(container, e.clientY)
+                    console.log(afterElement)
+                    const draggable = document.querySelector('.dragging')
+                    if(afterElement === null){
+                        container.appendChild(draggable)
+                    }
+                    else{
+                        container.insertBefore(draggable,afterElement)
+                    }
+
+                })
+            })
+        },
+        getDragAfterElement: function (container, y) {
+            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')]
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect()
+                const offset = y - box.top - box.height / 2
+                if (offset < 0 && offset > closest.offset) {
+                    return {'offset': offset, 'element': child}
+                } else {
+                    return closest
+                }
+            }, {offset: Number.NEGATIVE_INFINITY}).element
+        },
     }
 ;
 
