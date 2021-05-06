@@ -141,3 +141,6 @@ div#editor {
     display: none;
  }
 
+div.edittextarea {
+    display: none;
+}
