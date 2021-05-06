@@ -1,9 +1,5 @@
-from typing import List, Dict
-
-from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
 import database_common
-import persistence
 
 
 @database_common.connection_handler
@@ -39,12 +35,12 @@ def get_cards_for_board(cursor: RealDictCursor) -> list:
 
 
 @database_common.connection_handler
-def create_new_board(cursor: RealDictCursor, title):
+def create_new_board(cursor: RealDictCursor, title, user_id):
     query = """
-    INSERT INTO boards (title) 
-    VALUES (%(title)s)
+    INSERT INTO boards (title, user_id) 
+    VALUES (%(title)s, %(user_id)s)
     """
-    args = {'title': title}
+    args = {'title': title, 'user_id': user_id}
     cursor.execute(query, args)
 
 
@@ -83,7 +79,7 @@ def add_new_card(cursor: RealDictCursor, board_id: int, title: str, status_id):
 
 
 @database_common.connection_handler
-def save_changed_card(cursor: RealDictCursor, card_id:int, status_id:int):
+def save_changed_card(cursor: RealDictCursor, card_id: int, status_id: int):
     query = """
     UPDATE cards
     SET status_id = %(status_id)s
@@ -116,27 +112,6 @@ def get_private_boards(cursor: RealDictCursor, user_id) -> list:
     cursor.execute(query, usr_id)
     return cursor.fetchall()
 
-@database_common.connection_handler
-def delete_card(cursor, card_id: int):
-    query = """
-    DELETE FROM cards
-    WHERE id = %(card_id)s"""
-    var = {'card_id': card_id}
-    cursor.execute(query, var)
-
-
-@database_common.connection_handler
-def delete_board(cursor, board_id: int):
-    query = """
-    DELETE FROM cards
-    WHERE board_id = %(board_id)s;
-    
-    DELETE FROM boards
-    WHERE id = %(board_id)s;
-    """
-    var = {'board_id': board_id}
-    cursor.execute(query, var)
-
 
 @database_common.connection_handler
 def delete_card(cursor, card_id: int):
@@ -161,20 +136,20 @@ def delete_board(cursor, board_id: int):
 
 
 @database_common.connection_handler
-def update_card_title(cursor: RealDictCursor ,id, title):
+def update_card_title(cursor: RealDictCursor, id, title):
     query = """
         UPDATE cards SET title = %(title)s WHERE id = %(id)s;
     """
-    values = {'id': id,'title':title}
+    values = {'id': id, 'title': title}
     cursor.execute(query, values)
 
 
 @database_common.connection_handler
-def update_board_title(cursor: RealDictCursor ,id, title):
+def update_board_title(cursor: RealDictCursor, id, title):
     query = """
         UPDATE boards SET title = %(title)s WHERE id = %(id)s;
     """
-    values = {'id': id,'title':title}
+    values = {'id': id, 'title': title}
     cursor.execute(query, values)
 
 

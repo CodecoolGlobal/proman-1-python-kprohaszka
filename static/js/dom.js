@@ -6,7 +6,6 @@ export let dom = {
             // This function should run once, when the page is loaded.
             // loads the boards to the screen
             let session = await dataHandler.getSession()
-            console.log(session)
             if (session.OK) {
                 dom.loadBoards();
                 dom.loadPrivateBoards(session.user_id);
@@ -64,9 +63,9 @@ export let dom = {
             </section>
             `;
 
-    }
+            }
 
-    const outerHtml = `
+            const outerHtml = `
     <div class="board-container">
         ${boardList}
     </div>
@@ -135,6 +134,7 @@ export let dom = {
                 cardTitle.addEventListener("click", () => dom.renameCards(cardTitle, event))
             }
             ;
+            dom.dragAndDrop(boardId)
         },
 
         createNewCard: function (event) {
@@ -158,12 +158,15 @@ export let dom = {
             addBoardButton.addEventListener('click', this.createBoard);
         },
 
-        createBoard: function () {
+        createBoard: async function () {
+            let session = await dataHandler.getSession()
+            let user_id = session.user_id
             let titleInput = window.prompt("Board name?");
-            dataHandler.createNewBoard(titleInput, function () {
+            dataHandler.createNewBoard(titleInput, user_id, function () {
                 let boardsContainerKill = document.getElementById("boards");
                 boardsContainerKill.innerHTML = ``;
                 dom.loadBoards();
+                dom.loadPrivateBoards(user_id);
             });
         },
 
@@ -175,7 +178,6 @@ export let dom = {
 
         registerUserHandler: function (e) {
             e.preventDefault();
-            console.log(e.target);
             const username = e.target.register_user_name.value;
             const password = e.target.register_password.value;
             dataHandler.registerUser(username, password, (response) => {
@@ -192,6 +194,7 @@ export let dom = {
             dataHandler.getLoggedInBoards(user_id, function (privateBoards) {
                 dataHandler.getStatuses(function (statuses) {
                     dom.showBoards(privateBoards, statuses);
+                    dom.deleteBoard();
                 })
             });
 
@@ -203,7 +206,6 @@ export let dom = {
 
         loginHandler: function (e) {
             e.preventDefault();
-            console.log(e.target)
             const username = e.target.login_user_name.value
             const password = e.target.login_password.value
             dataHandler.loginUser(username, password, (response) => {
@@ -213,7 +215,7 @@ export let dom = {
                     loginForm.removeEventListener("submit", dom.loginHandler)
                     dom.renderLoggedInNavbar(response.username)
                     dom.addLogoutListener()
-                    dom.addBoardButtonToggle()
+                    dom.addBoardButtonToggle(response.user_id)
                 } else {
                     alert(response.OK)
                 }
@@ -222,7 +224,7 @@ export let dom = {
         renderLoggedOutNavbar: function () {
             let nbar = document.getElementById("navBar")
             nbar.innerHTML = `<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-            <button type="button" id="add-board" class="btn btn-dark">+ Create new board +</button>
+            <button type="button" id="add-board"  class="btn btn-dark">+ Create new board +</button>
 
             <div class="btn-group" role="group">
                 <button id="btnGroupDrop1" type="button"
@@ -289,7 +291,6 @@ export let dom = {
         },
         divNullifier: function () {
             let boards = document.getElementById('boards')
-            console.log(boards)
             boards.innerHTML = ''
         },
 
@@ -314,7 +315,6 @@ export let dom = {
             for (let delBoard of delBoards) {
                 delBoard.addEventListener('click', function () {
                     let boardId = delBoard.id
-                    console.log(boardId);
                     dataHandler.deleteBoard(boardId, function () {
                         let boardsContainerKill = document.getElementById("boards");
                         boardsContainerKill.innerHTML = ``;
@@ -324,13 +324,10 @@ export let dom = {
             }
         },
 
-        toggleEditor: function(event) {
-            console.log(event)
+        toggleEditor: function (event) {
             const headerId = event.target.dataset.headerId
-            console.log(headerId)
             let theText = document.querySelector(`#header-${headerId}-id`)
             let theEditor = document.querySelector(`#textarea-${headerId}-id`)
-            console.log(theEditor)
             let editorArea = document.querySelector(`#editor-${headerId}-id`)
             let subject = theText.innerHTML;
             subject = subject.replace(new RegExp("<br />", "gi"), '\n');
@@ -339,11 +336,9 @@ export let dom = {
             theEditor.value = subject;
             theText.style.display = 'none';
             editorArea.style.display = 'inline';
-         },
-        doEdit: function(event) {
-            console.log(event)
+        },
+        doEdit: function (event) {
             const headerId = event.target.dataset.textareaId
-            console.log(headerId)
             let theText = document.querySelector(`#header-${headerId}-id`)
             let theEditor = document.querySelector(`#textarea-${headerId}-id`)
             let editorArea = document.querySelector(`#editor-${headerId}-id`)
@@ -354,10 +349,10 @@ export let dom = {
             theText.innerHTML = subject;
             theText.style.display = 'inline';
             editorArea.style.display = 'none';
-            dataHandler.renameBoard(headerId, subject, function() {
+            dataHandler.renameBoard(headerId, subject, function () {
                 dom.loadCards(headerId)
             })
-         },
+        },
 
         renameCards: function (cardTitle, event) {
             let cardId = event.target.dataset.cardId
@@ -365,7 +360,6 @@ export let dom = {
             let slicedId = fullId.slice(7);
             let slicedBoard = slicedId.substring(slicedId.lastIndexOf('-'));
             let boardId = slicedBoard.slice(1);
-            console.log(boardId)
             let oldCardTitle = cardTitle.innerHTML
             let newCardTitle = prompt("Edit card name:", `${oldCardTitle}`)
             dataHandler.renameCards(cardId, newCardTitle, function () {

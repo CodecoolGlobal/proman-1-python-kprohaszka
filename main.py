@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, make_response, session, escape, current_app
+from flask import Flask, render_template, request, url_for, session
 import util
 import data_handler
 from psycopg2 import Error
@@ -6,7 +6,6 @@ from psycopg2 import Error
 app = Flask(__name__)
 app.secret_key = b'super_secret_key'
 # app.permanent_session_lifetime = False
-
 
 
 @app.route("/")
@@ -47,8 +46,9 @@ def get_statuses():
 @app.route('/create-new-board', methods=['GET', 'POST'])
 @util.json_response
 def create_new_board():
-    title = request.json
-    data_handler.create_new_board(title['title'])
+    user_id = request.json["user_id"]
+    title = request.json['title']
+    data_handler.create_new_board(title, user_id)
 
 
 @app.route("/get-cards/<int:board_id>")
@@ -175,7 +175,7 @@ def rename_board():
     print(f'REQUEST.JSON{data}')
     id = data['id']
     title = data['title']
-    data_handler.update_board_title(id,title)
+    data_handler.update_board_title(id, title)
 
 
 if __name__ == '__main__':
