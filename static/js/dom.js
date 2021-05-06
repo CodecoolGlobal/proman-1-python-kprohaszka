@@ -380,9 +380,12 @@ showBoards: function (boards, statuses) {
             subject = subject.replace(new RegExp(">", "g"), '>');
             subject = subject.replace(new RegExp("n", "g"), '<br />');
             theText.innerHTML = subject;
-            alert(subject)
+            alert('Successful Renaming')
             theText.style.display = 'inline';
             editorArea.style.display = 'none';
+            dataHandler.renameBoard(headerId, subject, function() {
+                dom.loadCards(headerId)
+            })
          },
 
         renameCards: function (cardTitle, event) {
