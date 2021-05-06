@@ -140,7 +140,19 @@ section.board {
 div#editor {
     display: none;
  }
+.card-container{
+    padding: 1rem;
+    margin-top: 1rem;
+}
 
 div.edittextarea {
+    display: none;
+}
+.board-save{
+
+    margin-top: 0.77rem;
+    float: right;
+}
+.hidden {
     display: none;
 }

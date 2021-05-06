@@ -32,37 +32,37 @@ export let dom = {
             });
 
         },
-showBoards: function (boards, statuses) {
-    // shows boards appending them to #boards div
-    // it adds necessary event listeners also
-    let boardList = '';
-    let i = 0;
-    //make the button id unique
-    for (let board of boards) {
-        boardList += `
-        <section class="board" id="${board.id}">
-
-    <div class="board-header"><span id="header-${board.id}-id" class="board-title" data-header-id="${board.id}">${board.title}</span>
-        <button class="card-add-btn" data-board-id="${board.id}" id="add-new-card">Create new card</button>
-        <button class="board-delete" id="${board.id}" type="button"><i class="fas fa-times"></i></button>
-        <button data-board-id="${board.id}" id="button_board${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
-    </div>
-    <div class='edittextarea' id="editor-${board.id}-id">
+        showBoards: function (boards, statuses) {
+            // shows boards appending them to #boards div
+            // it adds necessary event listeners also
+            let boardList = '';
+            let i = 0;
+            //make the button id unique
+            for (let board of boards) {
+                boardList += `
+                <section class="board" id="${board.id}">
+            <div class="board-header"><span id="header-${board.id}-id" class="board-title" data-header-id="${board.id}">${board.title}</span>
+                <button class="card-add-btn" data-board-id="${board.id}" id="add-new-card">Create new card</button>
+                <button class="board-delete" id="${board.id}" type="button"><i class="fas fa-times"></i></button>
+                <button class="board-save hidden" id="save${board.id}" type="button">Save</button>
+                <button data-board-id="${board.id}" id="button_board${board.id}" type="button"   class="board-toggle valami" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div class='edittextarea' id="editor-${board.id}-id">
             <textarea data-textarea-id="${board.id}" id="textarea-${board.id}-id" name="ta1" rows="1" cols="20"></textarea><br />
             <input name="submit" id="input_textarea-${board.id}-id" type="button" value="Edit Text" class='textbox2' data-textarea-id="${board.id}"/>
                     </div>
-    <div class="board-columns collapse" id="board${board.id}">`
-        for (let status of statuses) {
-            boardList += `
-    <div class="board-column" data-status="${status.id}" id="status${status.id}">
-            <div class="board-column-title">${status.title}</div>
-            <div class="card-container" id="column-${board.id}-${status.id}"></div>
-        </div>`
-        }
-        boardList += `
-        </div>
-    </section>
-    `;
+            <div class="board-columns collapse" id="board${board.id}">`
+                for (let status of statuses) {
+                    boardList += `
+            <div class="board-column" data-status="${status.id}" id="status${status.id}">
+                    <div class="board-column-title">${status.title}</div>
+                    <div class="card-container" id="column-${board.id}-${status.id}"></div>
+                </div>`
+                }
+                boardList += `
+                </div>
+            </section>
+            `;
 
     }
 
@@ -95,6 +95,7 @@ showBoards: function (boards, statuses) {
                 dataHandler.getCardsByBoardId(boardId, function (cards) {
                     dom.showCards(cards, boardId, statuses);
                     dom.deleteCard();
+                    dom.dragAndDrop(boardId);
                 });
             })
 
@@ -119,7 +120,7 @@ showBoards: function (boards, statuses) {
                     }
                 }
                 for (let t of tmp) {
-                    insert += `<div class="card" draggable="true" id="cardId-${t.id}-${t.status_id}-${boardId}"> 
+                    insert += `<div class="card draggable" draggable="true" id="cardID-${t.id}-${t.status_id}-${boardId}"> 
                              <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title" data-card-id="${t.id}" >${t.title}</div>
                 </div>`
@@ -134,7 +135,6 @@ showBoards: function (boards, statuses) {
                 cardTitle.addEventListener("click", () => dom.renameCards(cardTitle, event))
             }
             ;
-            dom.dragAndDrop(boardId)
         },
 
         createNewCard: function (event) {
@@ -195,33 +195,6 @@ showBoards: function (boards, statuses) {
                 })
             });
 
-        },
-        dragAndDrop: function (boardId) {
-            let draggables = document.querySelectorAll('.card')
-            let containers = document.querySelectorAll('.board-column')
-            draggables.forEach(draggable => {
-                draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'))
-
-                draggable.addEventListener('dragend', () => {
-                    draggable.classList.remove('dragging')
-
-                })
-            })
-            containers.forEach(container => {
-                container.addEventListener('dragover', e => {
-                        e.preventDefault()
-                        let dragged = document.querySelector('.dragging')
-                        container.appendChild(dragged)
-
-                        let tmp = dragged.id.slice(0, 9)
-                        let tmp2 = container.getAttribute('data-status')
-                        console.log(tmp2)
-                        dragged.id = tmp + tmp2
-
-
-                    }
-                )
-            })
         },
         sendLogin: function () {
             const loginForm = document.querySelector("#loginForm")
@@ -359,9 +332,8 @@ showBoards: function (boards, statuses) {
             let theEditor = document.querySelector(`#textarea-${headerId}-id`)
             console.log(theEditor)
             let editorArea = document.querySelector(`#editor-${headerId}-id`)
-            var subject = theText.innerHTML;
-            subject = subject.replace(new RegExp("<br />", "gi"), 'n');
-            subject = subject.replace(new RegExp("<br />", "gi"), 'n');
+            let subject = theText.innerHTML;
+            subject = subject.replace(new RegExp("<br />", "gi"), '\n');
             subject = subject.replace(new RegExp("<", "gi"), '<');
             subject = subject.replace(new RegExp(">", "gi"), '>');
             theEditor.value = subject;
@@ -375,10 +347,10 @@ showBoards: function (boards, statuses) {
             let theText = document.querySelector(`#header-${headerId}-id`)
             let theEditor = document.querySelector(`#textarea-${headerId}-id`)
             let editorArea = document.querySelector(`#editor-${headerId}-id`)
-            var subject = theEditor.value;
+            let subject = theEditor.value;
             subject = subject.replace(new RegExp("<", "g"), '<');
             subject = subject.replace(new RegExp(">", "g"), '>');
-            subject = subject.replace(new RegExp("n", "g"), '<br />');
+            subject = subject.replace(new RegExp("\n", "g"), '<br />');
             theText.innerHTML = subject;
             theText.style.display = 'inline';
             editorArea.style.display = 'none';
@@ -399,7 +371,71 @@ showBoards: function (boards, statuses) {
             dataHandler.renameCards(cardId, newCardTitle, function () {
                 dom.loadCards(boardId)
             })
-        }
+        },
+        dragAndDrop: function (boardId) {
+            let draggables = document.querySelectorAll('.draggable')
+            let containers = document.querySelectorAll('.card-container')
+            let deletebutton = document.getElementById('save' + boardId)
+            let dataCache = []
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'))
+
+                draggable.addEventListener('dragend', () => {
+                    dataCache = []
+                    for (let data of draggables){
+                        dataCache.push(data.id)
+                    }
+                    console.log(dataCache)
+                    if (deletebutton.classList.contains('hidden')) {
+                        deletebutton.classList.remove('hidden')
+                        deletebutton.addEventListener('click', () => {
+                            dataHandler.saveCards(dataCache, () => {
+                                    deletebutton.removeEventListener('click', () => {})
+                                }
+                            )
+                            deletebutton.classList.add('hidden')
+                        })
+                    }
+                    draggable.classList.remove('dragging')
+
+                })
+            })
+            containers.forEach(container => {
+                container.addEventListener('dragover', e => {
+                    e.preventDefault()
+                    const afterElement = dom.getDragAfterElement(container, e.clientY)
+                    const draggable = document.querySelector('.dragging')
+
+                    let infos = dom.getCardInfo(draggable.id)
+                    draggable.id =infos[0] + "-" + container.id.slice(9, 10) + "-" + container.id.slice(7, 8)
+                    if (afterElement === null) {
+                        container.appendChild(draggable)
+                    } else {
+                        container.insertBefore(draggable, afterElement)
+                    }
+
+                })
+            })
+        },
+        getCardInfo: function (card) {
+
+            let card_id = card.slice(0,8)
+            let status_id = card.slice(9, 10)
+            let board_id = card.slice(11, 12)
+            return [card_id, status_id, board_id]
+        },
+        getDragAfterElement: function (container, y) { //seems magical to me
+            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')]
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect()
+                const offset = y - box.top - box.height / 2
+                if (offset < 0 && offset > closest.offset) {
+                    return {'offset': offset, 'element': child}
+                } else {
+                    return closest
+                }
+            }, {offset: Number.NEGATIVE_INFINITY}).element
+        },
     }
 ;
 
