@@ -71,15 +71,19 @@ def get_cards_for_board(board_id: int):
 @app.route('/login', methods=["GET", "POST"])
 def login():
     usr_name = request.json['username']
-    password = request.json['password']
-    hashed_pass = data_handler.get_usr_credentials(usr_name)
-    user_id = data_handler.get_user_id(usr_name)
-    if util.verify_password(password, hashed_pass['password']):
-        session['user'] = usr_name
-        session['user_id'] = user_id['id']
-        return {"OK": True, "user_id": user_id['id'], "username": usr_name}
+    check_username = data_handler.check_user(usr_name)
+    if check_username:
+        password = request.json['password']
+        hashed_pass = data_handler.get_usr_credentials(usr_name)
+        user_id = data_handler.get_user_id(usr_name)
+        if util.verify_password(password, hashed_pass['password']):
+            session['user'] = usr_name
+            session['user_id'] = user_id['id']
+            return {"OK": True, "user_id": user_id['id'], "username": usr_name}
+        else:
+            return {"OK": "The username, or password does not match!"}
     else:
-        return {"OK": "The username, or password does not match!"}
+        return {"OK": "The user is not registered yet"}
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -100,6 +104,7 @@ def register():
 def logout():
     # remove the username from the session if it's there
     session.pop('user', None)
+    session.pop('user_id', None)
     return {"OK": 'You are safely logged out.'}
 
 
